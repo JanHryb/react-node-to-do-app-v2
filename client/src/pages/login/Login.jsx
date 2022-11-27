@@ -148,7 +148,7 @@ function Login() {
           />
         </div>
         <div className={styles["form__content-wrapper"]}>
-          <Checkbox onClick={handleRememberChange}>Remember me</Checkbox>
+          <Checkbox onChange={handleRememberChange}>Remember me</Checkbox>
         </div>
 
         <div className={styles["form__content-wrapper"]}>
