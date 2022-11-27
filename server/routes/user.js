@@ -129,8 +129,8 @@ router.post("/login", async (req, res) => {
           .status(StatusCodes.OK)
           .cookie("access_token", access_token, {
             httpOnly: true,
-            sameSite: true,
             secure: true,
+            sameSite: "none",
             maxAge: cookieMaxAge,
           })
           .json("successfull login");

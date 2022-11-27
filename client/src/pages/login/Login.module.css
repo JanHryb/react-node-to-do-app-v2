@@ -1,1 +1,57 @@
-/*# sourceMappingURL=Login.module.css.map */
+.main {
+  height: calc(100% - 65px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+}
+
+.form {
+  width: 400px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background: rgba(0, 0, 0, 0.95);
+  border-radius: 5px;
+  padding: 3em;
+  display: flex;
+  flex-direction: column;
+}
+.form__content-wrapper {
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1em;
+}
+.form__content-wrapper:last-child {
+  margin: 0;
+}
+.form__content-wrapper__header {
+  text-align: center;
+  font-size: 1.4em;
+}
+.form__content-wrapper__input {
+  color: white;
+}
+.form__content-wrapper__link-wrapper {
+  font-size: 0.9em;
+  color: rgb(195, 195, 195);
+}
+.form__content-wrapper__link-wrapper__link {
+  margin-left: 0.5em;
+  color: #3182ce;
+  font-weight: bold;
+  text-decoration: none;
+}
+.form__content-wrapper__link-wrapper__link:hover {
+  text-decoration: underline;
+}
+.form__content-wrapper__error-message {
+  font-size: 0.8em;
+  color: #b73e3e;
+}
+.form__content-wrapper__error-message::first-letter {
+  text-transform: uppercase;
+}/*# sourceMappingURL=Login.module.css.map */
