@@ -14,8 +14,13 @@ router.get(
     session: false,
   }),
   (req, res) => {
+    const user = {
+      _id: req.user._id,
+      username: req.user.username,
+      email: req.user.email,
+    };
     console.log(req.user);
-    return res.status(StatusCodes.OK).json(req.user);
+    return res.status(StatusCodes.OK).json(user);
   }
 );
 
@@ -120,14 +125,14 @@ router.post("/login", async (req, res) => {
           cookieMaxAge = cookieMaxAge * 14; //cookie expires after 14 days
         }
 
-        const access_token = jwt.sign(
+        const accessToken = jwt.sign(
           { _id: user._id },
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: cookieMaxAge }
         );
         return res
           .status(StatusCodes.OK)
-          .cookie("access_token", access_token, {
+          .cookie("accessToken", accessToken, {
             httpOnly: true,
             secure: true,
             sameSite: "none",

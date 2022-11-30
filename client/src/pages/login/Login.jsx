@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import styles from "./Login.module.css";
 import { Input, Checkbox, Button } from "@chakra-ui/react";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 function Login() {
@@ -62,12 +62,10 @@ function Login() {
           { baseURL: "http://localhost:5000/", withCredentials: true }
         )
         .then((res) => {
-          //TODO:
-          // console.log(res);
-          // localStorage.setItem("authenticated", true);
-          navigate("/profile");
+          navigate("/", { state: { successfulLogin: true } });
         })
         .catch((err) => {
+          console.log(err);
           if (err.response.status !== 500) {
             console.log(err.response.data);
             setErrorMessages(err.response.data);

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarCheck, faUser } from "@fortawesome/free-solid-svg-icons";
 
-function Navbar() {
+function Navbar({ user }) {
   const [iconColor, setIconColor] = useState("#fff");
 
   const handleMouseEnter = () => {
@@ -14,9 +14,6 @@ function Navbar() {
   const handleMouseLeave = () => {
     setIconColor("#fff");
   };
-
-  //TODO: check auth
-  const authenticated = 0;
 
   return (
     <nav className={styles["navbar"]}>
@@ -31,10 +28,10 @@ function Navbar() {
       <ul className={styles["navbar__menu"]}>
         <li className={styles["navbar__menu__item"]}>
           <Link to="/" className={styles["navbar__menu__item__link"]}>
-            Home
+            Dashboard
           </Link>
         </li>
-        {authenticated ? (
+        {user ? (
           <li
             className={`${styles["navbar__menu__item"]} ${styles["navbar__menu__item-user"]}`}
           >

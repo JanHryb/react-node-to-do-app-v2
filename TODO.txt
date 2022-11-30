@@ -1,1 +1,5 @@
+use chakra UI components
+open react project using "http://localhost:5173" not "http://127.0.0.1:5173"->(idk why cookie with token isnt setting on client)
+
 TODO: user auth
+TODO: logout

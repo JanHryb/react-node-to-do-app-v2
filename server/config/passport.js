@@ -4,7 +4,7 @@ const User = require("../models/User");
 
 // custom jwt extractor
 const cookieExtractor = (req) => {
-  const token = req.cookies["access_token"];
+  const token = req.cookies["accessToken"];
   if (token) {
     return token;
   } else {

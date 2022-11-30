@@ -1,30 +1,64 @@
-import React from "react";
+import React, { useLayoutEffect, useEffect, useState } from "react";
 import Navbar from "./components/navbar/Navbar";
 import Footer from "./components/footer/Footer";
-import Home from "./pages/home/Home";
+import RequireAuth from "./components/requireAuth/RequireAuth";
+import NotRequireAuth from "./components/notRequireAuth/NotRequireAuth";
+import Dashboard from "./pages/dashboard/Dashboard";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import NotFound from "./pages/notFound/NotFound";
 import Profle from "./pages/profile/Profile";
-import { Routes, Route } from "react-router-dom";
+import axios from "axios";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
+import { ClipLoader } from "react-spinners";
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  let location = useLocation();
+
+  useEffect(() => {
+    console.log("auth check request");
+    axios
+      .get("user", { baseURL: "http://localhost:5000/", withCredentials: true })
+      .then((res) => {
+        setUser(res.data);
+        setLoading(true);
+      })
+      .catch((err) => {
+        setUser(null);
+        setLoading(true);
+      });
+  }, [location]);
+
   return (
     <>
-      <div className="container">
-        <ToastContainer />
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/login" element={<Login />}></Route>
-          <Route path="/register" element={<Register />}></Route>
-          <Route path="/profile" element={<Profle />}></Route>
-          <Route path="*" element={<NotFound />}></Route>
-        </Routes>
-      </div>
-      <Footer />
+      {loading ? (
+        <>
+          <div className="container">
+            <ToastContainer />
+            <Navbar user={user} />
+            <Routes>
+              <Route element={<RequireAuth user={user} />}>
+                <Route path="/" element={<Dashboard />}></Route>
+                <Route path="/profile" element={<Profle />}></Route>
+              </Route>
+              <Route element={<NotRequireAuth user={user} />}>
+                <Route path="/login" element={<Login />}></Route>
+                <Route path="/register" element={<Register />}></Route>
+              </Route>
+              <Route path="*" element={<NotFound />}></Route>
+            </Routes>
+          </div>
+          <Footer />
+        </>
+      ) : (
+        <>
+          <ClipLoader color="#36d7b7" />
+        </>
+      )}
     </>
   );
 }
