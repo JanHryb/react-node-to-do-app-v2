@@ -1,8 +1,8 @@
 import React, { useLayoutEffect, useEffect, useState } from "react";
 import Navbar from "./components/navbar/Navbar";
 import Footer from "./components/footer/Footer";
-import RequireAuth from "./components/requireAuth/RequireAuth";
-import NotRequireAuth from "./components/notRequireAuth/NotRequireAuth";
+import RequireAuth from "./components/auth/RequireAuth";
+import ForwardAuth from "./components/auth/ForwardAuth";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
@@ -20,7 +20,6 @@ function App() {
   let location = useLocation();
 
   useEffect(() => {
-    console.log("auth check request");
     axios
       .get("user", { baseURL: "http://localhost:5000/", withCredentials: true })
       .then((res) => {
@@ -43,9 +42,9 @@ function App() {
             <Routes>
               <Route element={<RequireAuth user={user} />}>
                 <Route path="/" element={<Dashboard />}></Route>
-                <Route path="/profile" element={<Profle />}></Route>
+                <Route path="/profile" element={<Profle user={user} />}></Route>
               </Route>
-              <Route element={<NotRequireAuth user={user} />}>
+              <Route element={<ForwardAuth user={user} />}>
                 <Route path="/login" element={<Login />}></Route>
                 <Route path="/register" element={<Register />}></Route>
               </Route>

@@ -120,15 +120,15 @@ router.post("/login", async (req, res) => {
         throw new Error("bcrypt error");
       }
       if (result) {
-        let cookieMaxAge = 1000 * 60 * 60 * 24 * 1; //cookie expires after 1 day
+        let tokenExpiryTime = 1000 * 60 * 60 * 24 * 1; //cookie expires after 1 day
         if (remember) {
-          cookieMaxAge = cookieMaxAge * 14; //cookie expires after 14 days
+          tokenExpiryTime = tokenExpiryTime * 7; //cookie expires after 7 days
         }
 
         const accessToken = jwt.sign(
           { _id: user._id },
           process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: cookieMaxAge }
+          { expiresIn: tokenExpiryTime }
         );
         return res
           .status(StatusCodes.OK)
@@ -136,7 +136,6 @@ router.post("/login", async (req, res) => {
             httpOnly: true,
             secure: true,
             sameSite: "none",
-            maxAge: cookieMaxAge,
           })
           .json("successfull login");
       } else {
@@ -148,6 +147,10 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR);
   }
+});
+
+router.post("/logout", (req, res) => {
+  //TODO:
 });
 
 module.exports = router;

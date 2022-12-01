@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet, Navigate } from "react-router-dom";
 
-function NotRequireAuth({ user }) {
+function ForwardAuth({ user }) {
   if (!user) {
     return <Outlet />;
   } else {
@@ -9,4 +9,4 @@ function NotRequireAuth({ user }) {
   }
 }
 
-export default NotRequireAuth;
+export default ForwardAuth;
