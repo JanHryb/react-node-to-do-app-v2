@@ -1,13 +1,13 @@
 import React, { useLayoutEffect, useEffect, useState } from "react";
-import Navbar from "./components/navbar/Navbar";
-import Footer from "./components/footer/Footer";
-import RequireAuth from "./components/requireAuth/RequireAuth";
-import NotRequireAuth from "./components/notRequireAuth/NotRequireAuth";
-import Dashboard from "./pages/dashboard/Dashboard";
-import Login from "./pages/login/Login";
-import Register from "./pages/register/Register";
-import NotFound from "./pages/notFound/NotFound";
-import Profle from "./pages/profile/Profile";
+import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/Footer/Footer";
+import RequireAuth from "./components/RequireAuth/RequireAuth";
+import NotRequireAuth from "./components/NotRequireAuth/NotRequireAuth";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
+import NotFound from "./pages/NotFound/NotFound";
+import Profle from "./pages/Profile/Profile";
 import axios from "axios";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -55,9 +55,7 @@ function App() {
           <Footer />
         </>
       ) : (
-        <>
-          <ClipLoader color="#36d7b7" />
-        </>
+        <>{/* <ClipLoader color="#36d7b7" /> */}</>
       )}
     </>
   );
