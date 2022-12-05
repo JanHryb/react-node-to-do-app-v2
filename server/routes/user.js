@@ -150,7 +150,10 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-  //TODO:
+  return res
+    .status(StatusCodes.OK)
+    .clearCookie("accessToken")
+    .json("you are logged out");
 });
 
 module.exports = router;

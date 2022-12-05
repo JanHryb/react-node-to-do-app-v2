@@ -75,12 +75,10 @@ function Login() {
   };
 
   useEffect(() => {
-    const successRegisterMessage = localStorage.getItem(
-      "successRegisterMessage"
-    );
-    if (successRegisterMessage) {
-      toast.success(successRegisterMessage, {
-        toastId: "successRegisterMessage1",
+    const successMessage = localStorage.getItem("successMessage");
+    if (successMessage) {
+      toast.success(successMessage, {
+        toastId: "successMessage1",
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -90,7 +88,7 @@ function Login() {
         progress: undefined,
         theme: "dark",
       });
-      localStorage.removeItem("successRegisterMessage");
+      localStorage.removeItem("successMessage");
     }
   }, []);
 

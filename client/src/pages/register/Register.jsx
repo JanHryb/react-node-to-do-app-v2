@@ -85,10 +85,7 @@ function Register() {
         )
         .then((res) => {
           // console.log(res);
-          localStorage.setItem(
-            "successRegisterMessage",
-            "Account has been created"
-          );
+          localStorage.setItem("successMessage", "Account has been created");
           navigate("/login");
         })
         .catch((err) => {

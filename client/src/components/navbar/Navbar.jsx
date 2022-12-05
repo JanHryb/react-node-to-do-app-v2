@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import styles from "./Navbar.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarCheck, faUser } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "@chakra-ui/react";
+import axios from "axios";
 
 function Navbar({ user }) {
   const [iconColor, setIconColor] = useState("#fff");
+  const navigate = useNavigate();
 
   const handleMouseEnter = () => {
     setIconColor("#7978ff");
@@ -13,6 +16,20 @@ function Navbar({ user }) {
 
   const handleMouseLeave = () => {
     setIconColor("#fff");
+  };
+
+  const logout = () => {
+    axios
+      .post(
+        "user/logout",
+        {},
+        { baseURL: "http://localhost:5000/", withCredentials: true }
+      )
+      .then((res) => {
+        localStorage.setItem("successMessage", "You are logged out");
+        navigate("/login");
+      })
+      .catch((err) => {});
   };
 
   return (
@@ -64,6 +81,20 @@ function Navbar({ user }) {
                 >
                   Profile
                 </Link>
+              </li>
+              <li
+                className={
+                  styles["navbar__menu__item-user__dropdown-menu__item"]
+                }
+              >
+                <Button
+                  colorScheme="blue"
+                  size="sm"
+                  variant="solid"
+                  onClick={logout}
+                >
+                  Log out
+                </Button>
               </li>
             </ul>
           </li>
