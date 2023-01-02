@@ -26,7 +26,6 @@ function Navbar({ user }) {
         { baseURL: "http://localhost:5000/", withCredentials: true }
       )
       .then((res) => {
-        localStorage.setItem("successMessage", "You are logged out");
         navigate("/login");
       })
       .catch((err) => {});

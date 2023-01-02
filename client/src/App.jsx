@@ -24,10 +24,12 @@ function App() {
       .get("user", { baseURL: "http://localhost:5000/", withCredentials: true })
       .then((res) => {
         setUser(res.data);
-        setLoading(true);
       })
       .catch((err) => {
+        console.log(err);
         setUser(null);
+      })
+      .finally(() => {
         setLoading(true);
       });
   }, [location]);
