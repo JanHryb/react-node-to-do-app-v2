@@ -9,7 +9,7 @@ import Register from "./pages/register/Register";
 import NotFound from "./pages/notFound/NotFound";
 import Profle from "./pages/profile/Profile";
 import axios from "axios";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { ClipLoader } from "react-spinners";
@@ -44,6 +44,10 @@ function App() {
             <Routes>
               <Route element={<RequireAuth user={user} />}>
                 <Route path="/" element={<Dashboard />}></Route>
+                <Route
+                  path="/dashboard"
+                  element={<Navigate to="/" replace />}
+                ></Route>
                 <Route path="/profile" element={<Profle user={user} />}></Route>
               </Route>
               <Route element={<ForwardAuth user={user} />}>
