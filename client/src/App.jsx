@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./components/navbar/Navbar";
 import Footer from "./components/footer/Footer";
 import RequireAuth from "./components/auth/RequireAuth";
@@ -12,7 +12,7 @@ import axios from "axios";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
-import { ClipLoader } from "react-spinners";
+// import { ClipLoader } from "react-spinners";
 
 function App() {
   const [user, setUser] = useState(null);

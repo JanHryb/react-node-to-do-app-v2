@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Login.module.css";
-import { Input, Checkbox, Button } from "@chakra-ui/react";
 import { toast } from "react-toastify";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Login() {
@@ -115,14 +114,13 @@ function Login() {
           ) : (
             <></>
           )}
-          <Input
+          <input
             type="email"
-            placeholder="Email"
-            variant="flushed"
-            className={styles["form__content-wrapper__input"]}
             required
             onChange={handleEmailChange}
             value={email}
+            className={styles["form__content-wrapper__input"]}
+            placeholder="Email"
           />
         </div>
         <div className={styles["form__content-wrapper"]}>
@@ -133,28 +131,39 @@ function Login() {
           ) : (
             <></>
           )}
-          <Input
+          <input
             type="password"
             placeholder="Password"
-            variant="flushed"
-            className={styles["form__content-wrapper__input"]}
-            required
             onChange={handlePasswordChange}
             value={password}
+            className={styles["form__content-wrapper__input"]}
+            required
           />
         </div>
-        <div className={styles["form__content-wrapper"]}>
-          <Checkbox onChange={handleRememberChange}>Remember me</Checkbox>
+        <div
+          className={`${styles["form__content-wrapper"]} ${styles["form__content-wrapper--checkbox"]}`}
+        >
+          <input
+            type="checkbox"
+            onChange={handleRememberChange}
+            className={styles["form__content-wrapper__input--checkbox"]}
+            id="checkbox"
+          />
+          <label
+            htmlFor="checkbox"
+            className={styles["form__content-wrapper__label--checkbox"]}
+          >
+            Remember me
+          </label>
         </div>
 
         <div className={styles["form__content-wrapper"]}>
-          <Button
-            colorScheme="blue"
-            className={styles["form__content-wrapper__button"]}
+          <button
             type="submit"
+            className={styles["form__content-wrapper__button"]}
           >
             Login
-          </Button>
+          </button>
         </div>
         <div className={styles["form__content-wrapper"]}>
           <p className={styles["form__content-wrapper__link-wrapper"]}>

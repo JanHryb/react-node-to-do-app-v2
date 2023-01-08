@@ -28,12 +28,59 @@
 .form__content-wrapper:last-child {
   margin: 0;
 }
+.form__content-wrapper--checkbox {
+  flex-direction: row;
+}
 .form__content-wrapper__header {
   text-align: center;
   font-size: 1.4em;
 }
 .form__content-wrapper__input {
-  color: white;
+  font-size: 0.95em;
+  padding-top: 0.35em;
+  padding-bottom: 0.35em;
+  outline: none;
+  border: none;
+  border-bottom: 2px solid #3182ce;
+  background: none;
+  color: #fff;
+}
+.form__content-wrapper__input::-moz-placeholder {
+  color: #777777;
+}
+.form__content-wrapper__input:-ms-input-placeholder {
+  color: #777777;
+}
+.form__content-wrapper__input::placeholder {
+  color: #777777;
+}
+.form__content-wrapper__input:focus::-moz-placeholder {
+  color: transparent;
+}
+.form__content-wrapper__input:focus:-ms-input-placeholder {
+  color: transparent;
+}
+.form__content-wrapper__input:focus::placeholder {
+  color: transparent;
+}
+.form__content-wrapper__input:focus {
+  background: rgba(0, 0, 0, 0.85);
+}
+.form__content-wrapper__input--checkbox {
+  cursor: pointer;
+  margin-right: 0.5em;
+}
+.form__content-wrapper__label--checkbox {
+  cursor: pointer;
+  color: #777777;
+}
+.form__content-wrapper__button {
+  padding: 1em;
+  font-size: 1em;
+  cursor: pointer;
+  background: #3182ce;
+  border-radius: 5px;
+  color: #fff;
 }
 .form__content-wrapper__link-wrapper {
   font-size: 0.9em;

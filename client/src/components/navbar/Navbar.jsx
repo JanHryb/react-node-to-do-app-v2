@@ -3,20 +3,10 @@ import styles from "./Navbar.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarCheck, faUser } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "@chakra-ui/react";
 import axios from "axios";
 
 function Navbar({ user }) {
-  const [iconColor, setIconColor] = useState("#fff");
   const navigate = useNavigate();
-
-  const handleMouseEnter = () => {
-    setIconColor("#7978ff");
-  };
-
-  const handleMouseLeave = () => {
-    setIconColor("#fff");
-  };
 
   const logout = () => {
     axios
@@ -53,20 +43,11 @@ function Navbar({ user }) {
           >
             <Link
               to="/profile"
-              className={styles["navbar__menu__item__link"]}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
+              className={`${styles["navbar__menu__item__link"]} ${styles["navbar__menu__item__link--profile"]}`}
             >
-              <FontAwesomeIcon
-                icon={faUser}
-                style={{ color: iconColor, transition: "color 0.2s" }}
-              />
+              <FontAwesomeIcon icon={faUser} />
             </Link>
-            <ul
-              className={styles["navbar__menu__item-user__dropdown-menu"]}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
+            <ul className={styles["navbar__menu__item-user__dropdown-menu"]}>
               <li
                 className={
                   styles["navbar__menu__item-user__dropdown-menu__item"]
@@ -86,14 +67,16 @@ function Navbar({ user }) {
                   styles["navbar__menu__item-user__dropdown-menu__item"]
                 }
               >
-                <Button
-                  colorScheme="blue"
-                  size="sm"
-                  variant="solid"
+                <button
                   onClick={logout}
+                  className={
+                    styles[
+                      "navbar__menu__item-user__dropdown-menu__item__button"
+                    ]
+                  }
                 >
                   Log out
-                </Button>
+                </button>
               </li>
             </ul>
           </li>

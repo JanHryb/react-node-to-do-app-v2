@@ -39,7 +39,7 @@
   text-decoration: none;
 }
 .navbar__menu__item__link:hover {
-  color: #7978ff;
+  color: #3182ce;
   transition: color 0.2s;
 }
 .navbar__menu__item__link--button {
@@ -48,8 +48,8 @@
   border-radius: 20px;
 }
 .navbar__menu__item__link--button:hover {
-  color: #7978ff;
-  border-color: #7978ff;
+  color: #3182ce;
+  border-color: #3182ce;
   transition: all 0.2s;
 }
 .navbar__menu__item-user {
@@ -58,11 +58,14 @@
 .navbar__menu__item-user:hover .navbar__menu__item-user__dropdown-menu {
   display: flex;
 }
+.navbar__menu__item-user:hover .navbar__menu__item__link--profile {
+  color: #3182ce;
+}
 .navbar__menu__item-user__dropdown-menu {
   position: absolute;
   left: 0;
   list-style: none;
-  background: #7978ff;
+  background: rgba(0, 0, 0, 0.95);
   padding: 0.8em;
   flex-direction: column;
   flex-wrap: wrap;
@@ -74,6 +77,15 @@
 }
 .navbar__menu__item-user__dropdown-menu__item:first-child {
   margin: 0;
+}
+.navbar__menu__item-user__dropdown-menu__item__button {
+  border: none;
+  white-space: nowrap;
+  font-size: 0.95em;
+  text-decoration: none;
+  color: #fff;
+  background: none;
+  cursor: pointer;
 }
 .navbar__menu__item-user__dropdown-menu__item__link {
   white-space: nowrap;

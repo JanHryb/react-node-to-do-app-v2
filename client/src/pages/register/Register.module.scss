@@ -27,9 +27,31 @@
       font-size: 1.4em;
     }
     &__input {
-      color: white;
+      font-size: 0.95em;
+      padding-top: 0.35em;
+      padding-bottom: 0.35em;
+      outline: none;
+      border: none;
+      border-bottom: 2px solid #3182ce;
+      background: none;
+      color: #fff;
+      &::placeholder {
+        color: #777777;
+      }
+      &:focus::placeholder {
+        color: transparent;
+      }
+      &:focus {
+        background: rgba(0, 0, 0, 0.85);
+      }
     }
     &__button {
+      padding: 1em;
+      cursor: pointer;
+      background: #3182ce;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 1em;
     }
     &__link-wrapper {
       font-size: 0.9em;

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styles from "./Register.module.css";
-import { Input, Button } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -114,14 +113,13 @@ function Register() {
           ) : (
             <></>
           )}
-          <Input
+          <input
             type="text"
-            placeholder="Username"
-            variant="flushed"
-            className={styles["form__content-wrapper__input"]}
-            required
             onChange={handleUsernameChange}
             value={username}
+            className={styles["form__content-wrapper__input"]}
+            placeholder="Username"
+            required
           />
         </div>
         <div className={styles["form__content-wrapper"]}>
@@ -132,14 +130,13 @@ function Register() {
           ) : (
             <></>
           )}
-          <Input
+          <input
             type="email"
-            placeholder="Email"
-            variant="flushed"
-            className={styles["form__content-wrapper__input"]}
-            required
             onChange={handleEmailChange}
             value={email}
+            className={styles["form__content-wrapper__input"]}
+            placeholder="Email"
+            required
           />
         </div>
         <div className={styles["form__content-wrapper"]}>
@@ -150,14 +147,13 @@ function Register() {
           ) : (
             <></>
           )}
-          <Input
+          <input
             type="password"
-            placeholder="Password"
-            variant="flushed"
-            className={styles["form__content-wrapper__input"]}
-            required
             onChange={handlePasswordChange}
             value={password}
+            required
+            placeholder="Password"
+            className={styles["form__content-wrapper__input"]}
           />
         </div>
         <div className={styles["form__content-wrapper"]}>
@@ -168,24 +164,22 @@ function Register() {
           ) : (
             <></>
           )}
-          <Input
+          <input
             type="password"
-            placeholder="Repeat password"
-            variant="flushed"
-            className={styles["form__content-wrapper__input"]}
-            required
             onChange={handlePasswordRepeatChange}
             value={passwordRepeat}
+            required
+            placeholder="Repeat password"
+            className={styles["form__content-wrapper__input"]}
           />
         </div>
         <div className={styles["form__content-wrapper"]}>
-          <Button
-            colorScheme="blue"
-            className={styles["form__content-wrapper__button"]}
+          <button
             type="submit"
+            className={styles["form__content-wrapper__button"]}
           >
             Register
-          </Button>
+          </button>
         </div>
         <div className={styles["form__content-wrapper"]}>
           <p className={styles["form__content-wrapper__link-wrapper"]}>
