@@ -1,1 +1,28 @@
-
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5em;
+}
+.profile-wrapper {
+  &__item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    &__icon-profile {
+    }
+    &__title-username {
+    }
+    &__title-details {
+    }
+    &__title {
+      width: 100%;
+    }
+    &__description {
+    }
+    &__icon-edit {
+      cursor: pointer;
+    }
+  }
+}

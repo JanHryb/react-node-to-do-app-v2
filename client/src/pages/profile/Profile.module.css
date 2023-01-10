@@ -1,1 +1,19 @@
-/*# sourceMappingURL=Profile.module.css.map */
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5em;
+}
+
+.profile-wrapper__item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.profile-wrapper__item__title {
+  width: 100%;
+}
+.profile-wrapper__item__icon-edit {
+  cursor: pointer;
+}/*# sourceMappingURL=Profile.module.css.map */

@@ -18,6 +18,7 @@ router.get(
       _id: req.user._id,
       username: req.user.username,
       email: req.user.email,
+      verified: req.user.verified,
     };
     console.log(req.user);
     return res.status(StatusCodes.OK).json(user);

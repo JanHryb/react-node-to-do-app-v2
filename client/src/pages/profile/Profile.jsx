@@ -18,11 +18,49 @@ function Profile({ user }) {
           </h1>
         </div>
         <div className={styles["profile-wrapper__item"]}>
-          <h2 className={styles["profile-wrapper__item__title-details"]}>
+          <h3 className={styles["profile-wrapper__item__title-details"]}>
             Account details
-          </h2>
+          </h3>
         </div>
         <div className={styles["profile-wrapper__item"]}>
+          <p className={styles["profile-wrapper__item__title"]}>Username</p>
+          <p className={styles["profile-wrapper__item__description"]}>
+            {user.username}
+          </p>
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className={styles["profile-wrapper__item__icon-edit"]}
+          />
+        </div>
+        <div className={styles["profile-wrapper__item"]}>
+          <p className={styles["profile-wrapper__item__title"]}>Email</p>
+          <p className={styles["profile-wrapper__item__description"]}>
+            {user.email}
+          </p>
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className={styles["profile-wrapper__item__icon-edit"]}
+          />
+        </div>
+        <div className={styles["profile-wrapper__item"]}>
+          <p className={styles["profile-wrapper__item__title"]}>
+            Email verification status
+          </p>
+          {user.verified ? (
+            <p className={styles["profile-wrapper__item__description"]}>
+              verified
+            </p>
+          ) : (
+            <p className={styles["profile-wrapper__item__description"]}>
+              not verified
+            </p>
+          )}
+        </div>
+        <div className={styles["profile-wrapper__item"]}>
+          <p className={styles["profile-wrapper__item__title"]}>Password</p>
+          <p className={styles["profile-wrapper__item__description"]}>
+            ••••••••••••
+          </p>
           <FontAwesomeIcon
             icon={faPenToSquare}
             className={styles["profile-wrapper__item__icon-edit"]}
