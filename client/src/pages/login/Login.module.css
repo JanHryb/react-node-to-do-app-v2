@@ -75,6 +75,7 @@
   color: #777777;
 }
 .form__content-wrapper__button {
+  border: none;
   padding: 1em;
   font-size: 1em;
   cursor: pointer;
