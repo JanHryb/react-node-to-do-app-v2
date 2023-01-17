@@ -7,7 +7,8 @@ import {
   faXmarkCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Profile({ user }) {
   const [username, setUsername] = useState("");
@@ -31,6 +32,8 @@ function Profile({ user }) {
     newPassword: "",
     newPasswordRepeat: "",
   });
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const openForm = (e, formType) => {
     if (clickable) {
@@ -102,7 +105,42 @@ function Profile({ user }) {
         errorMessages.username = "username can't contain space";
       }
       if (validForm) {
-        //TODO: axios post request to server
+        axios
+          .post(
+            "user/editUsername",
+            {
+              username,
+              userId: user._id,
+            },
+            { baseURL: "http://localhost:5000/" }
+          )
+          .then((res) => {
+            navigate(location.pathname);
+            toast.success("username updated", {
+              toastId: "successEditMessage1",
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            setErrorMessages({
+              username: "",
+              email: "",
+              currentPassword: "",
+              newPassword: "",
+              newPasswordRepeat: "",
+            });
+            closeForm(e, "username");
+          })
+          .catch((err) => {
+            if (err.response.status !== 500) {
+              setErrorMessages(err.response.data);
+            }
+          });
       } else {
         setErrorMessages(errorMessages);
       }

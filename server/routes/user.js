@@ -157,4 +157,42 @@ router.post("/logout", (req, res) => {
     .json("you are logged out");
 });
 
+router.post("/editUsername", async (req, res) => {
+  const { username, userId } = req.body;
+  let validForm = true;
+  let errorMessages = {
+    username: "",
+    email: "",
+    currentPassword: "",
+    newPassword: "",
+    newPasswordRepeat: "",
+  };
+  if (username.length < 3) {
+    errorMessages.username = "this field must be at least 3 characters";
+    validForm = false;
+  }
+  if (username.indexOf(" ") >= 0) {
+    errorMessages.username = "username can't contain space";
+    validForm = false;
+  }
+  if (validForm) {
+    try {
+      const update = await User.findByIdAndUpdate(
+        { _id: userId },
+        { username }
+      );
+      console.log(update);
+      return res.status(StatusCodes.OK).json("username updated successfully");
+    } catch (err) {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  } else {
+    return res.status(StatusCodes.BAD_REQUEST).json(errorMessages);
+  }
+});
+
+router.post("/editPassword", (req, res) => {});
+
+router.post("/editEmail", (req, res) => {});
+
 module.exports = router;
