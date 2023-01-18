@@ -56,16 +56,37 @@ function Profile({ user }) {
     if (formType == "username") {
       setFormUsernameStyle({ display: "none" });
       setUsername("");
+      setErrorMessages({
+        username: "",
+        email: "",
+        currentPassword: "",
+        newPassword: "",
+        newPasswordRepeat: "",
+      });
     }
     if (formType == "password") {
       setFormPasswordStyle({ display: "none" });
       setCurrentPassword("");
       setNewPassword("");
       setNewPasswordRepeat("");
+      setErrorMessages({
+        username: "",
+        email: "",
+        currentPassword: "",
+        newPassword: "",
+        newPasswordRepeat: "",
+      });
     }
     if (formType == "email") {
       setFormEmailStyle({ display: "none" });
       setEmail("");
+      setErrorMessages({
+        username: "",
+        email: "",
+        currentPassword: "",
+        newPassword: "",
+        newPasswordRepeat: "",
+      });
     }
   };
 
@@ -103,6 +124,10 @@ function Profile({ user }) {
       if (username.indexOf(" ") >= 0) {
         validForm = false;
         errorMessages.username = "username can't contain space";
+      }
+      if (user.username === username) {
+        validForm = false;
+        closeForm(e, "username");
       }
       if (validForm) {
         axios
@@ -151,6 +176,11 @@ function Profile({ user }) {
         errorMessages.currentPassword =
           "this field must be at least 6 characters";
       }
+      if (newPassword === currentPassword) {
+        validForm = false;
+        errorMessages.newPasswordRepeat =
+          "new password is the same as current one";
+      }
       if (newPassword.length < 6) {
         validForm = false;
         errorMessages.newPassword = "this field must be at least 6 characters";
@@ -160,7 +190,44 @@ function Profile({ user }) {
         errorMessages.newPasswordRepeat = "passwords aren't equal";
       }
       if (validForm) {
-        //TODO: axios post request to server
+        axios
+          .post(
+            "user/editPassword",
+            {
+              currentPassword,
+              newPassword,
+              newPasswordRepeat,
+              userId: user._id,
+            },
+            { baseURL: "http://localhost:5000/" }
+          )
+          .then((res) => {
+            navigate(location.pathname);
+            toast.success("password updated", {
+              toastId: "successEditMessage2",
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            setErrorMessages({
+              username: "",
+              email: "",
+              currentPassword: "",
+              newPassword: "",
+              newPasswordRepeat: "",
+            });
+            closeForm(e, "password");
+          })
+          .catch((err) => {
+            if (err.response.status !== 500) {
+              setErrorMessages(err.response.data);
+            }
+          });
       } else {
         setErrorMessages(errorMessages);
       }
@@ -170,8 +237,47 @@ function Profile({ user }) {
         validForm = false;
         errorMessages.email = "email can't contain space";
       }
+      if (user.email === email) {
+        validForm = false;
+        closeForm(e, "email");
+      }
       if (validForm) {
-        //TODO: axios post request to server
+        axios
+          .post(
+            "user/editEmail",
+            {
+              email,
+              userId: user._id,
+            },
+            { baseURL: "http://localhost:5000/" }
+          )
+          .then((res) => {
+            navigate(location.pathname);
+            toast.success("email updated", {
+              toastId: "successEditMessage3",
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            setErrorMessages({
+              username: "",
+              email: "",
+              currentPassword: "",
+              newPassword: "",
+              newPasswordRepeat: "",
+            });
+            closeForm(e, "email");
+          })
+          .catch((err) => {
+            if (err.response.status !== 500) {
+              setErrorMessages(err.response.data);
+            }
+          });
       } else {
         setErrorMessages(errorMessages);
       }

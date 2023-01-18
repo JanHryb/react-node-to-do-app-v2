@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
+const { findByIdAndUpdate } = require("../models/User");
 
 //auth check
 
@@ -20,7 +21,7 @@ router.get(
       email: req.user.email,
       verified: req.user.verified,
     };
-    console.log(req.user);
+    // console.log(req.user);
     return res.status(StatusCodes.OK).json(user);
   }
 );
@@ -90,7 +91,7 @@ router.post("/register", async (req, res) => {
         return res.status(StatusCodes.CREATED).json("account has been created");
       });
     } catch (err) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end();
     }
   } else {
     return res.status(StatusCodes.BAD_REQUEST).json(errorMessages);
@@ -146,7 +147,7 @@ router.post("/login", async (req, res) => {
       }
     });
   } catch (err) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end();
   }
 });
 
@@ -167,6 +168,7 @@ router.post("/editUsername", async (req, res) => {
     newPassword: "",
     newPasswordRepeat: "",
   };
+
   if (username.length < 3) {
     errorMessages.username = "this field must be at least 3 characters";
     validForm = false;
@@ -175,24 +177,112 @@ router.post("/editUsername", async (req, res) => {
     errorMessages.username = "username can't contain space";
     validForm = false;
   }
+
   if (validForm) {
     try {
       const update = await User.findByIdAndUpdate(
         { _id: userId },
         { username }
       );
-      console.log(update);
+      // console.log(update);
       return res.status(StatusCodes.OK).json("username updated successfully");
     } catch (err) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end();
     }
   } else {
     return res.status(StatusCodes.BAD_REQUEST).json(errorMessages);
   }
 });
 
-router.post("/editPassword", (req, res) => {});
+router.post("/editPassword", async (req, res) => {
+  const { currentPassword, newPassword, newPasswordRepeat, userId } = req.body;
+  let validForm = true;
+  let errorMessages = {
+    username: "",
+    email: "",
+    currentPassword: "",
+    newPassword: "",
+    newPasswordRepeat: "",
+  };
 
-router.post("/editEmail", (req, res) => {});
+  if (currentPassword.length < 6) {
+    validForm = false;
+    errorMessages.currentPassword = "this field must be at least 6 characters";
+  }
+  if (newPassword === currentPassword) {
+    validForm = false;
+    errorMessages.newPasswordRepeat = "new password is the same as current one";
+  }
+  if (newPassword.length < 6) {
+    validForm = false;
+    errorMessages.newPassword = "this field must be at least 6 characters";
+  }
+  if (newPassword !== newPasswordRepeat) {
+    validForm = false;
+    errorMessages.newPasswordRepeat = "passwords aren't equal";
+  }
+
+  if (validForm) {
+    try {
+      const user = await User.findById({ _id: userId });
+      bcrypt.compare(currentPassword, user.password, (err, result) => {
+        if (err) throw new Error("bcrypt error");
+        if (result) {
+          bcrypt.hash(newPassword, 10, async (err, hash) => {
+            if (err) throw new Error("bcrypt error");
+            const update = await User.findByIdAndUpdate(
+              { _id: userId },
+              { password: hash }
+            );
+            // console.log(update);
+            return res
+              .status(StatusCodes.OK)
+              .json("password updated successfully");
+          });
+        } else {
+          errorMessages.currentPassword = "password is incorrect";
+          return res.status(StatusCodes.BAD_REQUEST).json(errorMessages);
+        }
+      });
+    } catch (err) {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end();
+    }
+  } else {
+    return res.status(StatusCodes.BAD_REQUEST).json(errorMessages);
+  }
+});
+
+router.post("/editEmail", async (req, res) => {
+  const { email, userId } = req.body;
+  let validForm = true;
+  let errorMessages = {
+    username: "",
+    email: "",
+    currentPassword: "",
+    newPassword: "",
+    newPasswordRepeat: "",
+  };
+
+  if (email.indexOf(" ") >= 0) {
+    validForm = false;
+    errorMessages.email = "email can't contain space";
+  }
+
+  if (validForm) {
+    try {
+      const update = await User.findByIdAndUpdate({ _id: userId }, { email });
+      console.log(update);
+      return res.status(StatusCodes.OK).json("email updated successfully");
+    } catch (err) {
+      if (err.code === 11000) {
+        errorMessages.email = "this email is already in use";
+        return res.status(StatusCodes.BAD_REQUEST).json(errorMessages);
+      }
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end();
+    }
+  } else {
+    return res.status(StatusCodes.BAD_REQUEST).json(errorMessages);
+  }
+});
 
 module.exports = router;
