@@ -1,6 +1,10 @@
-use chakra UI components
 open react project using "http://localhost:5173" not "http://127.0.0.1:5173"->(idk why cookie with token isnt setting on client)
 
 DONE: user auth
 DONE: logout:
             delete cookie(or cookies) containing token from client -> 'accessToken' cookie
+TODO: DASHBOARD
+  CLIENT: 
+  SERVER:
+    to do list schema(category, name, description, dead line(optional))
+    categories: books, finances, daily taskts -> make research in internet

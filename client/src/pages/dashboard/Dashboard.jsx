@@ -3,9 +3,9 @@ import styles from "./Dashboard.module.css";
 
 function Dashboard() {
   return (
-    <div>
+    <main className={styles["main"]}>
       <h1>dashboard</h1>
-    </div>
+    </main>
   );
 }
 
