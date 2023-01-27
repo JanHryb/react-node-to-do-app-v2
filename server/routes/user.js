@@ -5,7 +5,6 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
-const { findByIdAndUpdate } = require("../models/User");
 
 //auth check
 
