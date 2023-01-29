@@ -7,4 +7,5 @@ TODO: DASHBOARD
   CLIENT: 
   SERVER:
     to do list schema(category, name, description, dead line(optional))
-    categories: books, finances, daily taskts -> make research in internet
+    to do list categories: books, finances, daily tasks, custom list
+    the way to categorize to do list categories: all to do lists and the rest of todos
