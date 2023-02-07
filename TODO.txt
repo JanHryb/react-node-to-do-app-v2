@@ -4,8 +4,9 @@ DONE: user auth
 DONE: logout:
             delete cookie(or cookies) containing token from client -> 'accessToken' cookie
 TODO: DASHBOARD
-  CLIENT: 
-  SERVER:
-    to do list schema(category, name, description, dead line(optional))
-    to do list categories: books, finances, daily tasks, custom list
-    the way to categorize to do list categories: all to do lists and the rest of todos
+    -to do list schema(category, name, description, dead line(optional))
+    -to do list categories: books, finances, daily tasks, custom list
+    -all of teh categories has their own color/icon
+    -the way to categorize to do list categories on dashboard: all to do lists and the rest of todos
+    -percent schema showing task categories and schema showing done and not done tasks
+    -check discord channel for dashboard mockups

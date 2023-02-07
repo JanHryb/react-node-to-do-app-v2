@@ -43,7 +43,7 @@ function App() {
             <Navbar user={user} />
             <Routes>
               <Route element={<RequireAuth user={user} />}>
-                <Route path="/" element={<Dashboard />}></Route>
+                <Route path="/" element={<Dashboard user={user} />}></Route>
                 <Route
                   path="/dashboard"
                   element={<Navigate to="/" replace />}
