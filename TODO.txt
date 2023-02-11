@@ -4,9 +4,11 @@ DONE: user auth
 DONE: logout:
             delete cookie(or cookies) containing token from client -> 'accessToken' cookie
 TODO: DASHBOARD
-    -to do list schema(category, name, description, dead line(optional))
+    -to do list schema(category, name, description, date(optional))
     -to do list categories: books, finances, daily tasks, custom list
-    -all of teh categories has their own color/icon
+    -all of the categories has their own color/icon
     -the way to categorize to do list categories on dashboard: all to do lists and the rest of todos
-    -percent schema showing task categories and schema showing done and not done tasks
-    -check discord channel for dashboard mockups
+    -percent schema showing task categories and schema showing done and not done tasks (https://www.npmjs.com/package/chart.js/v/2.7.3) (https://openbase.com/categories/js/best-react-chart-libraries?vs=%40syncfusion%2Fej2-charts%2Crecharts%2Creact-chartjs-2)
+    -calendar - make custom calendar or skip skip it
+    -check discord channel/figma for dashboard mockups
+

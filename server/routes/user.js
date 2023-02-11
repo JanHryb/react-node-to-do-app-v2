@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
+const TaskCategory = require("../models/TaskCategory");
 
 //auth check
 
@@ -13,7 +14,13 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res) => {
+  async (req, res) => {
+    // await TaskCategory.create({
+    //   name: "meet",
+    //   icon: "icon",
+    //   color: "red",
+    //   userId: req.user._id,
+    // });
     const user = {
       _id: req.user._id,
       username: req.user.username,

@@ -3,6 +3,8 @@ const { Schema } = require("mongoose");
 
 const taskCategorySchema = new Schema({
   name: { type: String, required: true },
+  icon: { type: String, required: true },
+  color: { type: String, required: true },
   userId: { type: Schema.Types.ObjectId, ref: "User" },
 });
 
