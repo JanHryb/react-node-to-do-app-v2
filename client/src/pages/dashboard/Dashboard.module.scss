@@ -1,0 +1,117 @@
+.button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  &__icon {
+    font-size: 2em;
+    color: #3182ce;
+  }
+}
+.form {
+  z-index: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 400px;
+  max-height: fit-content;
+  user-select: none;
+  background: rgba(0, 0, 0, 0.95);
+  border-radius: 5px;
+  padding: 3em;
+  // display: flex;
+  // display: none;
+  flex-direction: column;
+  &__content-wrapper {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+    &:last-child {
+      margin: 0;
+    }
+    &--header {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    &__header {
+      width: fit-content;
+      text-align: left;
+      font-size: 1.4em;
+    }
+    &__input {
+      font-size: 0.95em;
+      padding-top: 0.35em;
+      padding-bottom: 0.35em;
+      outline: none;
+      border: none;
+      border-bottom: 2px solid #3182ce;
+      background: none;
+      color: #fff;
+      &::placeholder {
+        color: #777777;
+      }
+      &:focus::placeholder {
+        color: transparent;
+      }
+      &:focus {
+        background: rgba(0, 0, 0, 0.85);
+      }
+      &--datetime-local::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+      }
+      &--textarea {
+        resize: none;
+      }
+    }
+    &__button {
+      border: none;
+      padding: 1em;
+      cursor: pointer;
+      background: #3182ce;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 1em;
+    }
+    &__link-wrapper {
+      font-size: 0.9em;
+      color: rgb(195, 195, 195);
+      &__link {
+        margin-left: 0.5em;
+        color: #3182ce;
+        font-weight: bold;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+    &__error-message {
+      font-size: 0.8em;
+      color: #b73e3e;
+      &::first-letter {
+        text-transform: uppercase;
+      }
+    }
+    &__cancel-button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      &__icon {
+        font-size: 2em;
+        color: #3182ce;
+      }
+    }
+  }
+}
+.blur {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: calc(100%);
+  backdrop-filter: blur(5px);
+}

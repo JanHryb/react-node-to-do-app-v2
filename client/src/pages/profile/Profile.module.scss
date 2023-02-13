@@ -45,6 +45,7 @@
   }
 }
 .form {
+  z-index: 1;
   position: absolute;
   left: 0;
   right: 0;
@@ -135,4 +136,13 @@
       }
     }
   }
+}
+.blur {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: calc(100%);
+  backdrop-filter: blur(5px);
 }

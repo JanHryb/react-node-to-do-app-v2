@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Profile.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -16,6 +16,7 @@ function Profile({ user }) {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordRepeat, setNewPasswordRepeat] = useState("");
+  const [blurStyle, setBlurStyle] = useState({ display: "none" });
   const [formUsernameStyle, setFormUsernameStyle] = useState({
     display: "none",
   });
@@ -23,8 +24,6 @@ function Profile({ user }) {
   const [formPasswordStyle, setFormPasswordStyle] = useState({
     display: "none",
   });
-  const [mainStyle, setMainStyle] = useState({ filter: "blur(0px)" });
-  const [clickable, setClickable] = useState(true);
   const [errorMessages, setErrorMessages] = useState({
     username: "",
     email: "",
@@ -36,23 +35,19 @@ function Profile({ user }) {
   const location = useLocation();
 
   const openForm = (e, formType) => {
-    if (clickable) {
-      setClickable(false);
-      setMainStyle({ filter: "blur(4px)" });
-      if (formType == "username") {
-        setFormUsernameStyle({ display: "flex" });
-      }
-      if (formType == "password") {
-        setFormPasswordStyle({ display: "flex" });
-      }
-      if (formType == "email") {
-        setFormEmailStyle({ display: "flex" });
-      }
+    setBlurStyle({ display: "flex" });
+    if (formType == "username") {
+      setFormUsernameStyle({ display: "flex" });
+    }
+    if (formType == "password") {
+      setFormPasswordStyle({ display: "flex" });
+    }
+    if (formType == "email") {
+      setFormEmailStyle({ display: "flex" });
     }
   };
   const closeForm = (e, formType) => {
-    setClickable(true);
-    setMainStyle({ filter: "blur(0px)" });
+    setBlurStyle({ display: "none" });
     if (formType == "username") {
       setFormUsernameStyle({ display: "none" });
       setUsername("");
@@ -88,6 +83,25 @@ function Profile({ user }) {
         newPasswordRepeat: "",
       });
     }
+  };
+
+  const closeBlur = () => {
+    setBlurStyle({ display: "none" });
+    setFormUsernameStyle({ display: "none" });
+    setUsername("");
+    setFormPasswordStyle({ display: "none" });
+    setCurrentPassword("");
+    setNewPassword("");
+    setNewPasswordRepeat("");
+    setFormEmailStyle({ display: "none" });
+    setEmail("");
+    setErrorMessages({
+      username: "",
+      email: "",
+      currentPassword: "",
+      newPassword: "",
+      newPasswordRepeat: "",
+    });
   };
 
   const handleUsernameChange = (e) => {
@@ -286,7 +300,7 @@ function Profile({ user }) {
 
   return (
     <>
-      <main className={styles["main"]} style={mainStyle}>
+      <main className={styles["main"]}>
         <section className={styles["profile-wrapper"]}>
           <div
             className={`${styles["profile-wrapper__item"]} ${styles["profile-wrapper__item--profile"]}`}
@@ -370,6 +384,11 @@ function Profile({ user }) {
           </div>
         </section>
       </main>
+      <div
+        className={styles["blur"]}
+        style={blurStyle}
+        onClick={closeBlur}
+      ></div>
       <form
         className={styles["form"]}
         onSubmit={(e) => handleSubmit(e, "username")}

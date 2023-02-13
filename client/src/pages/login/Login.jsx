@@ -61,7 +61,7 @@ function Login() {
           { baseURL: "http://localhost:5000/", withCredentials: true }
         )
         .then((res) => {
-          navigate("/", { state: { successfulLogin: true } });
+          navigate("/");
         })
         .catch((err) => {
           console.log(err);

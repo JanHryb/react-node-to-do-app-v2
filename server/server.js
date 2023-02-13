@@ -18,6 +18,7 @@ app.use(cookieParser());
 require("./config/passport");
 
 app.use("/user", require("./routes/user"));
+app.use("/dashboard", require("./routes/dashboard"));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
