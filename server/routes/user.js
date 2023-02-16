@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
+const TaskCategory = require("../models/TaskCategory");
 
 //auth check
 
@@ -20,6 +21,12 @@ router.get(
       email: req.user.email,
       verified: req.user.verified,
     };
+    // await TaskCategory.create({
+    //   name: "test",
+    //   icon: "icon",
+    //   color: "color",
+    //   userId: req.user._id,
+    // });
     // console.log(req.user);
     return res.status(StatusCodes.OK).json(user);
   }

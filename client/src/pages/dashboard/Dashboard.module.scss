@@ -36,6 +36,20 @@
       flex-direction: row;
       justify-content: space-between;
     }
+    &--select {
+      flex-direction: row;
+      justify-content: space-between;
+      &__button {
+        border: none;
+        background: none;
+        position: relative;
+        cursor: pointer;
+        &__icon {
+          font-size: 2em;
+          color: #3182ce;
+        }
+      }
+    }
     &__header {
       width: fit-content;
       text-align: left;
@@ -64,6 +78,10 @@
       }
       &--textarea {
         resize: none;
+      }
+      &--select {
+        width: 100%;
+        margin-right: 1em;
       }
     }
     &__button {

@@ -2,15 +2,20 @@ import React, { useState, useEffect } from "react";
 import styles from "./Dashboard.module.css";
 import { format } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCirclePlus,
+  faXmarkCircle,
+  faClipboardList, // TODO: use if for all category(for all tasks)
+} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
 function Dashboard({ user }) {
   const currentDate = format(new Date(), "eeee, d MMM");
   const minCalendarDate = format(new Date(), "yyyy-MM-dd'T'HH:mm");
-  const [loading, setLoading] = useState(true); // set this to false!
+  const [loading, setLoading] = useState(false);
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
+  const [taskCategory, setTaskCategory] = useState("");
   const [taskDate, setTaskDate] = useState("");
   const [blurStyle, setBlurStyle] = useState({ display: "none" });
   const [formCreateTaskStyle, SetFormCreateTaskStyle] = useState({
@@ -19,14 +24,38 @@ function Dashboard({ user }) {
   const [errorMessages, setErrorMessages] = useState({
     taskName: "",
   });
+  const [categories, setCategories] = useState([]);
 
-  useEffect(() => {}, []); // GET request to the server to get all tasks
+  useEffect(() => {
+    axios
+      .post(
+        "dashboard/categories",
+        {
+          userId: user._id,
+        },
+        {
+          baseURL: "http://localhost:5000/",
+        }
+      )
+      .then((res) => {
+        setCategories(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(true);
+      });
+  }, []);
 
   const handleTaskNameChange = (e) => {
     setTaskName(e.target.value);
   };
   const handleTaskDescriptionChange = (e) => {
     setTaskDescription(e.target.value);
+  };
+  const handleTaskCategoryChange = (e) => {
+    setTaskCategory(e.target.value);
   };
   const handleTaskDateChange = (e) => {
     setTaskDate(e.target.value);
@@ -45,6 +74,7 @@ function Dashboard({ user }) {
       // TODO: reset all inputs and errors
       setTaskName("");
       setTaskDate("");
+      setTaskCategory("");
       setTaskDescription("");
       setErrorMessages({
         taskName: "",
@@ -141,8 +171,41 @@ function Dashboard({ user }) {
                 value={taskDescription}
                 className={`${styles["form__content-wrapper__input"]} ${styles["form__content-wrapper__input--textarea"]}`}
                 placeholder="description"
-                rows="4"
+                rows="3"
               ></textarea>
+            </div>
+            <div
+              className={`${styles["form__content-wrapper"]} ${styles["form__content-wrapper--select"]}`}
+            >
+              <select
+                className={`${styles["form__content-wrapper__input"]} ${styles["form__content-wrapper__input--select"]}`}
+                value={taskCategory}
+                onChange={handleTaskCategoryChange}
+                required
+              >
+                <option value="" disabled>
+                  list category
+                </option>
+                {categories.map(({ _id, name }) => (
+                  <option value={_id} key={_id}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                className={styles["form__content-wrapper--select__button"]}
+                onClick={(e) => {
+                  // TODO: openForm(e, "createTask"); // create form with ability adding custom lists
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faCirclePlus}
+                  className={
+                    styles["form__content-wrapper--select__button__icon"]
+                  }
+                />
+              </button>
             </div>
             <div className={styles["form__content-wrapper"]}>
               <input

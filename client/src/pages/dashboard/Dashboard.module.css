@@ -40,6 +40,20 @@
   flex-direction: row;
   justify-content: space-between;
 }
+.form__content-wrapper--select {
+  flex-direction: row;
+  justify-content: space-between;
+}
+.form__content-wrapper--select__button {
+  border: none;
+  background: none;
+  position: relative;
+  cursor: pointer;
+}
+.form__content-wrapper--select__button__icon {
+  font-size: 2em;
+  color: #3182ce;
+}
 .form__content-wrapper__header {
   width: -moz-fit-content;
   width: fit-content;
@@ -76,6 +90,10 @@
 }
 .form__content-wrapper__input--textarea {
   resize: none;
+}
+.form__content-wrapper__input--select {
+  width: 100%;
+  margin-right: 1em;
 }
 .form__content-wrapper__button {
   border: none;
