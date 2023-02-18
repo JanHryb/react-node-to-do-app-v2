@@ -15,8 +15,14 @@ TODO: DASHBOARD
       form
         DONE: rest of the form
         DONE: ablitity to choose task category
-        TODO: ablitity to create task category   
+        DONE: ablitity to create task category   
     TODO: view of all list categories
+    TODO: view of list category
+      TODO: ability to edit this category
+      TODO: ability to delete this (custom) category with all tasks related to it
+      TODO: ability to add task
+      TODO: ability to view task
+      TODO: ability to get done task
     TODO: pie chart (and another interesting charts)
 
 

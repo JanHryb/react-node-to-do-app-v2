@@ -5,8 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlus,
   faXmarkCircle,
+  faPencil,
   faClipboardList, // TODO: use if for all category(for all tasks)
 } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 import axios from "axios";
 
 function Dashboard({ user }) {
@@ -17,14 +19,17 @@ function Dashboard({ user }) {
   const [taskDescription, setTaskDescription] = useState("");
   const [taskCategory, setTaskCategory] = useState("");
   const [taskDate, setTaskDate] = useState("");
-  const [blurStyle, setBlurStyle] = useState({ display: "none" });
-  const [formCreateTaskStyle, SetFormCreateTaskStyle] = useState({
+  const [categoryName, setCategoryName] = useState("");
+  const [categoryColor, setCategoryColor] = useState("#000000");
+  const [formCreateTaskStyle, setFormCreateTaskStyle] = useState({
     display: "none",
   });
-  const [errorMessages, setErrorMessages] = useState({
-    taskName: "",
+  const [formCreateCategoryStyle, setFormCreateCategoryStyle] = useState({
+    display: "none",
   });
+  const [blurStyle, setBlurStyle] = useState({ display: "none" });
   const [categories, setCategories] = useState([]);
+  const [errorMessages, setErrorMessages] = useState({ categoryName: "" });
 
   useEffect(() => {
     axios
@@ -60,39 +65,129 @@ function Dashboard({ user }) {
   const handleTaskDateChange = (e) => {
     setTaskDate(e.target.value);
   };
+  const handleCategoryNameChange = (e) => {
+    setCategoryName(e.target.value);
+  };
+  const handleCategoryColorChange = (e) => {
+    setCategoryColor(e.target.value);
+  };
 
   const openForm = (e, formType) => {
-    setBlurStyle({ display: "flex" });
     if (formType == "createTask") {
-      SetFormCreateTaskStyle({ display: "flex" });
+      setBlurStyle({ display: "flex" });
+      setFormCreateTaskStyle({ display: "flex" });
+    }
+    if (formType == "createCategory") {
+      setFormCreateCategoryStyle({ display: "flex" });
+      setFormCreateTaskStyle({ display: "none" });
     }
   };
   const closeForm = (e, formType) => {
-    setBlurStyle({ display: "none" });
     if (formType == "createTask") {
-      SetFormCreateTaskStyle({ display: "none" });
-      // TODO: reset all inputs and errors
+      setBlurStyle({ display: "none" });
+      setFormCreateTaskStyle({ display: "none" });
       setTaskName("");
       setTaskDate("");
       setTaskCategory("");
       setTaskDescription("");
-      setErrorMessages({
-        taskName: "",
-      });
+    }
+    if (formType == "createCategory") {
+      setFormCreateCategoryStyle({ display: "none" });
+      setFormCreateTaskStyle({ display: "flex" });
+      setCategoryName("");
+      setCategoryColor("#000000");
+      setErrorMessages({ categoryName: "" });
     }
   };
 
   const handleSubmit = (e, formType) => {
     e.preventDefault();
     let validForm = true;
-    let errorMessages = {
-      taskName: "",
-    };
     if (formType == "createTask") {
-      // TODO: validate data
       if (validForm) {
-        // TODO: axios post request
-        console.log(taskName);
+        axios
+          .post(
+            "dashboard/create-task",
+            {
+              name: taskName,
+              description: taskDescription,
+              date: taskDate,
+              userId: user._id,
+              categoryId: taskCategory,
+            },
+            {
+              baseURL: "http://localhost:5000/",
+            }
+          )
+          .then((res) => {
+            toast.success("task created", {
+              toastId: "successCreateCategory1",
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            closeForm(e, "createTask");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
+    if (formType == "createCategory") {
+      if (validForm) {
+        axios
+          .post(
+            "dashboard/create-category",
+            {
+              name: categoryName,
+              icon: faPencil.iconName,
+              color: categoryColor,
+              userId: user._id,
+            },
+            {
+              baseURL: "http://localhost:5000/",
+            }
+          )
+          .then((res) => {
+            axios
+              .post(
+                "dashboard/categories",
+                {
+                  userId: user._id,
+                },
+                {
+                  baseURL: "http://localhost:5000/",
+                }
+              )
+              .then((res) => {
+                setCategories(res.data);
+                toast.success("list category created", {
+                  toastId: "successCreateCategory1",
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "dark",
+                });
+                closeForm(e, "createCategory");
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          })
+          .catch((err) => {
+            if (err.response.status !== 500) {
+              setErrorMessages(err.response.data);
+            }
+          });
       }
     }
   };
@@ -149,13 +244,6 @@ function Dashboard({ user }) {
               </button>
             </header>
             <div className={styles["form__content-wrapper"]}>
-              {errorMessages.taskName ? (
-                <p className={styles["form__content-wrapper__error-message"]}>
-                  name - {errorMessages.taskName}
-                </p>
-              ) : (
-                <></>
-              )}
               <input
                 type="text"
                 required
@@ -196,7 +284,7 @@ function Dashboard({ user }) {
                 type="button"
                 className={styles["form__content-wrapper--select__button"]}
                 onClick={(e) => {
-                  // TODO: openForm(e, "createTask"); // create form with ability adding custom lists
+                  TODO: openForm(e, "createCategory"); // create form with ability adding custom lists
                 }}
               >
                 <FontAwesomeIcon
@@ -215,6 +303,77 @@ function Dashboard({ user }) {
                 className={`${styles["form__content-wrapper__input"]} ${styles["form__content-wrapper__input--datetime-local"]}`}
                 placeholder="date"
                 min={minCalendarDate}
+              />
+            </div>
+            <div className={styles["form__content-wrapper"]}>
+              <button
+                type="submit"
+                className={styles["form__content-wrapper__button"]}
+              >
+                Create
+              </button>
+            </div>
+          </form>
+          <form
+            className={styles["form"]}
+            onSubmit={(e) => handleSubmit(e, "createCategory")}
+            style={formCreateCategoryStyle}
+          >
+            <header
+              className={`${styles["form__content-wrapper"]} ${styles["form__content-wrapper--header"]}`}
+            >
+              <h1 className={styles["form__content-wrapper__header"]}>
+                Custom list category
+              </h1>
+              <button
+                className={styles["form__content-wrapper__cancel-button"]}
+                type="button"
+                onClick={(e) => {
+                  closeForm(e, "createCategory");
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faXmarkCircle}
+                  className={
+                    styles["form__content-wrapper__cancel-button__icon"]
+                  }
+                />
+              </button>
+            </header>
+            <div className={styles["form__content-wrapper"]}>
+              {errorMessages.categoryName ? (
+                <p className={styles["form__content-wrapper__error-message"]}>
+                  name - {errorMessages.categoryName}
+                </p>
+              ) : (
+                <></>
+              )}
+              <input
+                type="text"
+                required
+                onChange={handleCategoryNameChange}
+                value={categoryName}
+                className={styles["form__content-wrapper__input"]}
+                placeholder="name"
+              />
+            </div>
+            <div
+              className={`${styles["form__content-wrapper"]} ${styles["form__content-wrapper--color"]}`}
+            >
+              <label
+                htmlFor="color"
+                className={styles["form__content-wrapper--color__label"]}
+              >
+                pick color
+              </label>
+              <input
+                type="color"
+                required
+                onChange={handleCategoryColorChange}
+                value={categoryColor}
+                className={`${styles["form__content-wrapper__input"]} ${styles["form__content-wrapper__input--color"]}`}
+                id="color"
+                placeholder="color"
               />
             </div>
             <div className={styles["form__content-wrapper"]}>

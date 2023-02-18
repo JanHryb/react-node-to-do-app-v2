@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = require("mongoose");
 
 const taskCategorySchema = new Schema({
-  name: { type: String, required: true },
+  name: { type: String, required: true, unique: true },
   icon: { type: String, required: true },
   color: { type: String, required: true },
   custom: { type: Boolean, default: true },
