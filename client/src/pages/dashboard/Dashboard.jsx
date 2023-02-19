@@ -1,18 +1,38 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Dashboard.module.css";
 import { format } from "date-fns";
+import { toast } from "react-toastify";
+import axios from "axios";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlus,
   faXmarkCircle,
   faPencil,
   faClipboardList, // TODO: use if for all category(for all tasks)
+  faHeart,
+  faSchool,
+  faWallet,
+  faBook,
+  faBriefcase,
+  faUserGroup,
+  faHouse,
 } from "@fortawesome/free-solid-svg-icons";
-import { toast } from "react-toastify";
-import axios from "axios";
+import { library } from "@fortawesome/fontawesome-svg-core";
+library.add(
+  faHeart,
+  faSchool,
+  faWallet,
+  faBook,
+  faBriefcase,
+  faUserGroup,
+  faHouse,
+  faPencil
+);
 
 function Dashboard({ user }) {
-  const currentDate = format(new Date(), "eeee, d MMM");
+  const currentDay = format(new Date(), "eeee");
+  const currentDate = format(new Date(), "d MMM");
   const minCalendarDate = format(new Date(), "yyyy-MM-dd'T'HH:mm");
   const [loading, setLoading] = useState(false);
   const [taskName, setTaskName] = useState("");
@@ -28,13 +48,16 @@ function Dashboard({ user }) {
     display: "none",
   });
   const [blurStyle, setBlurStyle] = useState({ display: "none" });
+  const [tasks, setTasks] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [errorMessages, setErrorMessages] = useState({ categoryName: "" });
+  const [categoriesWithNumOfTasks, setCategoriesWithNumOfTasks] = useState([]);
+  // const [errorMessages, setErrorMessages] = useState({ categoryName: "" });
+  const [updateData, setUpdateData] = useState(false);
 
   useEffect(() => {
     axios
       .post(
-        "dashboard/categories",
+        "dashboard/data",
         {
           userId: user._id,
         },
@@ -43,15 +66,18 @@ function Dashboard({ user }) {
         }
       )
       .then((res) => {
-        setCategories(res.data);
+        setTasks(res.data.tasks);
+        setCategories(res.data.categories);
+        setCategoriesWithNumOfTasks(res.data.categoriesWithNumOfTasks);
       })
+      .then(() => {})
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
         setLoading(true);
       });
-  }, []);
+  }, [updateData]);
 
   const handleTaskNameChange = (e) => {
     setTaskName(e.target.value);
@@ -96,7 +122,7 @@ function Dashboard({ user }) {
       setFormCreateTaskStyle({ display: "flex" });
       setCategoryName("");
       setCategoryColor("#000000");
-      setErrorMessages({ categoryName: "" });
+      // setErrorMessages({ categoryName: "" });
     }
   };
 
@@ -120,6 +146,7 @@ function Dashboard({ user }) {
             }
           )
           .then((res) => {
+            setUpdateData(!updateData);
             toast.success("task created", {
               toastId: "successCreateCategory1",
               position: "top-center",
@@ -154,39 +181,24 @@ function Dashboard({ user }) {
             }
           )
           .then((res) => {
-            axios
-              .post(
-                "dashboard/categories",
-                {
-                  userId: user._id,
-                },
-                {
-                  baseURL: "http://localhost:5000/",
-                }
-              )
-              .then((res) => {
-                setCategories(res.data);
-                toast.success("list category created", {
-                  toastId: "successCreateCategory1",
-                  position: "top-center",
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "dark",
-                });
-                closeForm(e, "createCategory");
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+            setUpdateData(!updateData);
+            toast.success("list category created", {
+              toastId: "successCreateCategory1",
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            closeForm(e, "createCategory");
           })
           .catch((err) => {
-            if (err.response.status !== 500) {
-              setErrorMessages(err.response.data);
-            }
+            // if (err.response.status !== 500) {
+            //   setErrorMessages(err.response.data);
+            // }
           });
       }
     }
@@ -197,24 +209,110 @@ function Dashboard({ user }) {
       {loading ? (
         <>
           <main className={styles["main"]}>
-            <section>
-              <h1>hello {user.username}</h1>
-              <p>{currentDate}</p>
-            </section>
-            <section>
-              <button
-                type="button"
-                className={styles["button"]}
-                onClick={(e) => {
-                  openForm(e, "createTask");
-                }}
-              >
+            <header className={styles["main__header-wrapper"]}>
+              <h1 className={styles["main__header-wrapper__header"]}>
+                <span
+                  className={styles["main__header-wrapper__header__normal"]}
+                >
+                  hello
+                </span>
+                <span> </span>
+                {user.username}
+              </h1>
+              <p className={styles["main__header-wrapper__date"]}>
+                <span className={styles["main__header-wrapper__date__bold"]}>
+                  {currentDay}
+                </span>
+                , {currentDate}
+              </p>
+            </header>
+
+            {/* TODO: display all list categories with number of tasks */}
+            <section className={styles["main__categories-wrapper"]}>
+              <header className={styles["main__categories-wrapper__header"]}>
+                <h3
+                  className={styles["main__categories-wrapper__header__title"]}
+                >
+                  Task lists
+                </h3>
+                <button
+                  type="button"
+                  className={styles["main__categories-wrapper__header__button"]}
+                  onClick={(e) => {
+                    openForm(e, "createTask");
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faCirclePlus}
+                    className={
+                      styles["main__categories-wrapper__header__button__icon"]
+                    }
+                  />
+                </button>
+              </header>
+              <div className={styles["main__categories-wrapper__category"]}>
                 <FontAwesomeIcon
-                  icon={faCirclePlus}
-                  className={styles["button__icon"]}
+                  icon={faClipboardList}
+                  className={styles["main__categories-wrapper__category__icon"]}
                 />
-              </button>
+                <div
+                  className={styles["main__categories-wrapper__category__box"]}
+                >
+                  <p
+                    className={
+                      styles["main__categories-wrapper__category__box__name"]
+                    }
+                  >
+                    all
+                  </p>
+                  <p
+                    className={
+                      styles["main__categories-wrapper__category__box__number"]
+                    }
+                  >
+                    {tasks.length} tasks
+                  </p>
+                </div>
+              </div>
+              {categoriesWithNumOfTasks.map(({ category, numOfTasks }) => (
+                <div
+                  key={category._id}
+                  className={styles["main__categories-wrapper__category"]}
+                >
+                  <FontAwesomeIcon
+                    icon={category.icon}
+                    className={
+                      styles["main__categories-wrapper__category__icon"]
+                    }
+                    style={{ color: category.color }}
+                  />
+                  <div
+                    className={
+                      styles["main__categories-wrapper__category__box"]
+                    }
+                  >
+                    <p
+                      className={
+                        styles["main__categories-wrapper__category__box__name"]
+                      }
+                    >
+                      {category.name}
+                    </p>
+                    <p
+                      className={
+                        styles[
+                          "main__categories-wrapper__category__box__number"
+                        ]
+                      }
+                    >
+                      {numOfTasks} tasks
+                    </p>
+                  </div>
+                </div>
+              ))}
             </section>
+            {/* TODO: pie chart and other charts */}
+            <section></section>
           </main>
           <div className={styles["blur"]} style={blurStyle}></div>
           <form
@@ -284,7 +382,7 @@ function Dashboard({ user }) {
                 type="button"
                 className={styles["form__content-wrapper--select__button"]}
                 onClick={(e) => {
-                  TODO: openForm(e, "createCategory"); // create form with ability adding custom lists
+                  openForm(e, "createCategory");
                 }}
               >
                 <FontAwesomeIcon
@@ -341,13 +439,13 @@ function Dashboard({ user }) {
               </button>
             </header>
             <div className={styles["form__content-wrapper"]}>
-              {errorMessages.categoryName ? (
+              {/* {errorMessages.categoryName ? (
                 <p className={styles["form__content-wrapper__error-message"]}>
                   name - {errorMessages.categoryName}
                 </p>
               ) : (
                 <></>
-              )}
+              )} */}
               <input
                 type="text"
                 required

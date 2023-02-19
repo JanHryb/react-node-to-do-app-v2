@@ -3,14 +3,48 @@ const { StatusCodes } = require("http-status-codes");
 const TaskCategory = require("../models/TaskCategory");
 const Task = require("../models/Task");
 
-router.post("/categories", async (req, res) => {
+router.post("/data", async (req, res) => {
   const { userId } = req.body;
   try {
+    const tasks = await Task.find({ userId: userId })
+      .populate("categoryId")
+      .sort({ categoryId: 1 });
     const taskCategories = await TaskCategory.find({ custom: false });
     const customTaskCategories = await TaskCategory.find({ userId: userId });
     const categories = [...taskCategories, ...customTaskCategories];
 
-    return res.status(StatusCodes.OK).json(categories);
+    let categoriesWithNumOfTasks = [];
+    if (tasks.length > 0) {
+      for (let i = 0; i < tasks.length; i++) {
+        if (i == 0) {
+          categoriesWithNumOfTasks.push({
+            category: tasks[i].categoryId,
+            numOfTasks: 1,
+          });
+          continue;
+        }
+        if (
+          tasks[i].categoryId.name ==
+          categoriesWithNumOfTasks[categoriesWithNumOfTasks.length - 1].category
+            .name
+        ) {
+          categoriesWithNumOfTasks[categoriesWithNumOfTasks.length - 1]
+            .numOfTasks++;
+        } else {
+          categoriesWithNumOfTasks.push({
+            category: tasks[i].categoryId,
+            numOfTasks: 1,
+          });
+        }
+      }
+    }
+
+    const data = {
+      tasks,
+      categories,
+      categoriesWithNumOfTasks,
+    };
+    return res.status(StatusCodes.OK).json(data);
   } catch (err) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end();
   }
@@ -19,7 +53,7 @@ router.post("/categories", async (req, res) => {
 router.post("/create-category", async (req, res) => {
   let { name, icon, color, userId } = req.body;
   name = name.toLowerCase();
-  let errorMessages = { categoryName: "" };
+  // let errorMessages = { categoryName: "" };
   try {
     await TaskCategory.create({
       name,
@@ -29,10 +63,10 @@ router.post("/create-category", async (req, res) => {
     });
     return res.status(StatusCodes.CREATED).json("category has been created");
   } catch (err) {
-    if (err.code === 11000) {
-      errorMessages.categoryName = "this list category already exists";
-      return res.status(StatusCodes.BAD_REQUEST).json(errorMessages);
-    }
+    // if (err.code === 11000) {
+    //   errorMessages.categoryName = "this list category already exists";
+    //   return res.status(StatusCodes.BAD_REQUEST).json(errorMessages);
+    // }
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end();
   }
 });
