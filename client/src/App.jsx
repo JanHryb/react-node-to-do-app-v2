@@ -4,6 +4,7 @@ import Footer from "./components/footer/Footer";
 import RequireAuth from "./components/auth/RequireAuth";
 import ForwardAuth from "./components/auth/ForwardAuth";
 import Dashboard from "./pages/dashboard/Dashboard";
+import Category from "./pages/category/Category";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import NotFound from "./pages/notFound/NotFound";
@@ -48,6 +49,7 @@ function App() {
                   path="/dashboard"
                   element={<Navigate to="/" replace />}
                 ></Route>
+                <Route path="/category" element={<Category />}></Route>
                 <Route path="/profile" element={<Profle user={user} />}></Route>
               </Route>
               <Route element={<ForwardAuth user={user} />}>

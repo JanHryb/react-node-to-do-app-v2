@@ -17,7 +17,7 @@ TODO: DASHBOARD
         DONE: ablitity to choose task category
         DONE: ablitity to create task category   
     DONE: view of all list categories
-    TODO: view of list category
+    TODO: view of list category -> Category.jsx
       TODO: ability to edit this category
       TODO: ability to delete this (custom) category with all tasks related to it
       TODO: ability to add task

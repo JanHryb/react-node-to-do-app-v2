@@ -3,13 +3,13 @@ import styles from "./Dashboard.module.css";
 import { format } from "date-fns";
 import { toast } from "react-toastify";
 import axios from "axios";
-
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlus,
   faXmarkCircle,
   faPencil,
-  faClipboardList, // TODO: use if for all category(for all tasks)
+  faClipboardList, // use if for all category(for all tasks)
   faHeart,
   faSchool,
   faWallet,
@@ -51,7 +51,7 @@ function Dashboard({ user }) {
   const [tasks, setTasks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [categoriesWithNumOfTasks, setCategoriesWithNumOfTasks] = useState([]);
-  // const [errorMessages, setErrorMessages] = useState({ categoryName: "" });
+  const [errorMessages, setErrorMessages] = useState({ categoryName: "" });
   const [updateData, setUpdateData] = useState(false);
 
   useEffect(() => {
@@ -122,9 +122,13 @@ function Dashboard({ user }) {
       setFormCreateTaskStyle({ display: "flex" });
       setCategoryName("");
       setCategoryColor("#000000");
-      // setErrorMessages({ categoryName: "" });
+      setErrorMessages({ categoryName: "" });
     }
   };
+
+  // const displayCategory = (category) => {
+  //   console.log(category._id);
+  // };
 
   const handleSubmit = (e, formType) => {
     e.preventDefault();
@@ -196,9 +200,9 @@ function Dashboard({ user }) {
             closeForm(e, "createCategory");
           })
           .catch((err) => {
-            // if (err.response.status !== 500) {
-            //   setErrorMessages(err.response.data);
-            // }
+            if (err.response.status !== 500) {
+              setErrorMessages(err.response.data);
+            }
           });
       }
     }
@@ -226,8 +230,6 @@ function Dashboard({ user }) {
                 , {currentDate}
               </p>
             </header>
-
-            {/* TODO: display all list categories with number of tasks */}
             <section className={styles["main__categories-wrapper"]}>
               <header className={styles["main__categories-wrapper__header"]}>
                 <h3
@@ -250,64 +252,93 @@ function Dashboard({ user }) {
                   />
                 </button>
               </header>
-              <div className={styles["main__categories-wrapper__category"]}>
-                <FontAwesomeIcon
-                  icon={faClipboardList}
-                  className={styles["main__categories-wrapper__category__icon"]}
-                />
-                <div
-                  className={styles["main__categories-wrapper__category__box"]}
-                >
-                  <p
+              {tasks.length > 0 ? (
+                <div className={styles["main__categories-wrapper__category"]}>
+                  <Link
+                    to="/category?name=all"
                     className={
-                      styles["main__categories-wrapper__category__box__name"]
+                      styles["main__categories-wrapper__category__link"]
                     }
                   >
-                    all
-                  </p>
-                  <p
-                    className={
-                      styles["main__categories-wrapper__category__box__number"]
-                    }
-                  >
-                    {tasks.length} tasks
-                  </p>
+                    <FontAwesomeIcon
+                      icon={faClipboardList}
+                      className={
+                        styles["main__categories-wrapper__category__link__icon"]
+                      }
+                    />
+                    <div
+                      className={
+                        styles["main__categories-wrapper__category__link__box"]
+                      }
+                    >
+                      <p
+                        className={
+                          styles[
+                            "main__categories-wrapper__category__link__box__name"
+                          ]
+                        }
+                      >
+                        all
+                      </p>
+                      <p
+                        className={
+                          styles[
+                            "main__categories-wrapper__category__link__box__number"
+                          ]
+                        }
+                      >
+                        {tasks.length} tasks
+                      </p>
+                    </div>
+                  </Link>
                 </div>
-              </div>
+              ) : (
+                <></>
+              )}
+
               {categoriesWithNumOfTasks.map(({ category, numOfTasks }) => (
                 <div
                   key={category._id}
                   className={styles["main__categories-wrapper__category"]}
                 >
-                  <FontAwesomeIcon
-                    icon={category.icon}
+                  <Link
+                    to={`/category?name=${category.name}`}
                     className={
-                      styles["main__categories-wrapper__category__icon"]
-                    }
-                    style={{ color: category.color }}
-                  />
-                  <div
-                    className={
-                      styles["main__categories-wrapper__category__box"]
+                      styles["main__categories-wrapper__category__link"]
                     }
                   >
-                    <p
+                    <FontAwesomeIcon
+                      icon={category.icon}
                       className={
-                        styles["main__categories-wrapper__category__box__name"]
+                        styles["main__categories-wrapper__category__link__icon"]
+                      }
+                      style={{ color: category.color }}
+                    />
+                    <div
+                      className={
+                        styles["main__categories-wrapper__category__link__box"]
                       }
                     >
-                      {category.name}
-                    </p>
-                    <p
-                      className={
-                        styles[
-                          "main__categories-wrapper__category__box__number"
-                        ]
-                      }
-                    >
-                      {numOfTasks} tasks
-                    </p>
-                  </div>
+                      <p
+                        className={
+                          styles[
+                            "main__categories-wrapper__category__link__box__name"
+                          ]
+                        }
+                      >
+                        {category.name}
+                      </p>
+                      <p
+                        className={
+                          styles[
+                            "main__categories-wrapper__category__link__box__number"
+                          ]
+                        }
+                      >
+                        {numOfTasks} tasks
+                      </p>
+                    </div>
+                  </Link>
                 </div>
               ))}
             </section>
@@ -439,13 +470,13 @@ function Dashboard({ user }) {
               </button>
             </header>
             <div className={styles["form__content-wrapper"]}>
-              {/* {errorMessages.categoryName ? (
+              {errorMessages.categoryName ? (
                 <p className={styles["form__content-wrapper__error-message"]}>
                   name - {errorMessages.categoryName}
                 </p>
               ) : (
                 <></>
-              )} */}
+              )}
               <input
                 type="text"
                 required
