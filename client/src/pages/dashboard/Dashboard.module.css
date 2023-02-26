@@ -4,15 +4,14 @@
   flex-direction: column;
   flex-wrap: wrap;
   padding: 1.5em;
-  padding-left: 12em;
-  padding-right: 12em;
-  position: relative;
+  padding-left: 2em;
+  padding-right: 2em;
 }
 .main__header-wrapper {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   margin-bottom: 3em;
 }
 .main__header-wrapper__header {

@@ -164,7 +164,7 @@ router.post("/logout", (req, res) => {
     .json("you are logged out");
 });
 
-router.post("/editUsername", async (req, res) => {
+router.post("/edit-username", async (req, res) => {
   const { username, userId } = req.body;
   let validForm = true;
   let errorMessages = {
@@ -200,7 +200,7 @@ router.post("/editUsername", async (req, res) => {
   }
 });
 
-router.post("/editPassword", async (req, res) => {
+router.post("/edit-password", async (req, res) => {
   const { currentPassword, newPassword, newPasswordRepeat, userId } = req.body;
   let validForm = true;
   let errorMessages = {
@@ -258,7 +258,7 @@ router.post("/editPassword", async (req, res) => {
   }
 });
 
-router.post("/editEmail", async (req, res) => {
+router.post("/edit-email", async (req, res) => {
   const { email, userId } = req.body;
   let validForm = true;
   let errorMessages = {
@@ -277,7 +277,6 @@ router.post("/editEmail", async (req, res) => {
   if (validForm) {
     try {
       const update = await User.findByIdAndUpdate({ _id: userId }, { email });
-      console.log(update);
       return res.status(StatusCodes.OK).json("email updated successfully");
     } catch (err) {
       if (err.code === 11000) {

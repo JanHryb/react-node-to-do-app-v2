@@ -51,7 +51,10 @@ function Dashboard({ user }) {
   const [tasks, setTasks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [categoriesWithNumOfTasks, setCategoriesWithNumOfTasks] = useState([]);
-  const [errorMessages, setErrorMessages] = useState({ categoryName: "" });
+  const [errorMessages, setErrorMessages] = useState({
+    categoryName: "",
+    categoryColor: "",
+  });
   const [updateData, setUpdateData] = useState(false);
 
   useEffect(() => {
@@ -122,17 +125,39 @@ function Dashboard({ user }) {
       setFormCreateTaskStyle({ display: "flex" });
       setCategoryName("");
       setCategoryColor("#000000");
-      setErrorMessages({ categoryName: "" });
+      setErrorMessages({
+        categoryName: "",
+        categoryColor: "",
+      });
     }
   };
 
-  // const displayCategory = (category) => {
-  //   console.log(category._id);
-  // };
+  const closeBlur = () => {
+    setBlurStyle({ display: "none" });
+    setFormCreateTaskStyle({ display: "none" });
+    setFormCreateCategoryStyle({ display: "none" });
+    setTaskName("");
+    setTaskDate("");
+    setTaskCategory("");
+    setTaskDescription("");
+    setCategoryName("");
+    setCategoryColor("#000000");
+    setErrorMessages({
+      categoryName: "",
+      categoryColor: "",
+    });
+  };
 
   const handleSubmit = (e, formType) => {
     e.preventDefault();
     let validForm = true;
+    if (categoryColor == "#ffffff") {
+      validForm = false;
+      setErrorMessages({
+        categoryName: "",
+        categoryColor: "category color can't be white",
+      });
+    }
     if (formType == "createTask") {
       if (validForm) {
         axios
@@ -287,7 +312,8 @@ function Dashboard({ user }) {
                           ]
                         }
                       >
-                        {tasks.length} tasks
+                        {tasks.length}{" "}
+                        {tasks.length == 1 ? <>task</> : <>tasks</>}
                       </p>
                     </div>
                   </Link>
@@ -296,56 +322,69 @@ function Dashboard({ user }) {
                 <></>
               )}
 
-              {categoriesWithNumOfTasks.map(({ category, numOfTasks }) => (
-                <div
-                  key={category._id}
-                  className={styles["main__categories-wrapper__category"]}
-                >
-                  <Link
-                    to={`/category?name=${category.name}`}
-                    className={
-                      styles["main__categories-wrapper__category__link"]
-                    }
+              {categoriesWithNumOfTasks.map(({ category, numOfTasks }) => {
+                return (
+                  <div
+                    key={category._id}
+                    className={styles["main__categories-wrapper__category"]}
                   >
-                    <FontAwesomeIcon
-                      icon={category.icon}
+                    <Link
+                      to={`/category?name=${category.name}`}
                       className={
-                        styles["main__categories-wrapper__category__link__icon"]
-                      }
-                      style={{ color: category.color }}
-                    />
-                    <div
-                      className={
-                        styles["main__categories-wrapper__category__link__box"]
+                        styles["main__categories-wrapper__category__link"]
                       }
                     >
-                      <p
+                      <FontAwesomeIcon
+                        icon={category.icon}
                         className={
                           styles[
-                            "main__categories-wrapper__category__link__box__name"
+                            "main__categories-wrapper__category__link__icon"
+                          ]
+                        }
+                        style={{ color: category.color }}
+                      />
+                      <div
+                        className={
+                          styles[
+                            "main__categories-wrapper__category__link__box"
                           ]
                         }
                       >
-                        {category.name}
-                      </p>
-                      <p
-                        className={
-                          styles[
-                            "main__categories-wrapper__category__link__box__number"
-                          ]
-                        }
-                      >
-                        {numOfTasks} tasks
-                      </p>
-                    </div>
-                  </Link>
-                </div>
-              ))}
+                        <p
+                          className={
+                            styles[
+                              "main__categories-wrapper__category__link__box__name"
+                            ]
+                          }
+                        >
+                          {category.name}
+                        </p>
+                        <p
+                          className={
+                            styles[
+                              "main__categories-wrapper__category__link__box__number"
+                            ]
+                          }
+                        >
+                          {numOfTasks}{" "}
+                          {numOfTasks == 1 ? <>task</> : <>tasks</>}
+                        </p>
+                      </div>
+                    </Link>
+                  </div>
+                );
+              })}
             </section>
             {/* TODO: pie chart and other charts */}
             <section></section>
           </main>
-          <div className={styles["blur"]} style={blurStyle}></div>
+          <div
+            className={styles["blur"]}
+            style={blurStyle}
+            onClick={() => {
+              closeBlur();
+            }}
+          ></div>
           <form
             className={styles["form"]}
             onSubmit={(e) => handleSubmit(e, "createTask")}
@@ -403,11 +442,13 @@ function Dashboard({ user }) {
                 <option value="" disabled>
                   list category
                 </option>
-                {categories.map(({ _id, name }) => (
-                  <option value={_id} key={_id}>
-                    {name}
-                  </option>
-                ))}
+                {categories.map(({ _id, name }) => {
+                  return (
+                    <option value={_id} key={_id}>
+                      {name}
+                    </option>
+                  );
+                })}
               </select>
               <button
                 type="button"
@@ -486,6 +527,13 @@ function Dashboard({ user }) {
                 placeholder="name"
               />
             </div>
+            {errorMessages.categoryColor ? (
+              <p className={styles["form__content-wrapper__error-message"]}>
+                color - {errorMessages.categoryColor}
+              </p>
+            ) : (
+              <></>
+            )}
             <div
               className={`${styles["form__content-wrapper"]} ${styles["form__content-wrapper--color"]}`}
             >

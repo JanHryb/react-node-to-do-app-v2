@@ -49,7 +49,10 @@ function App() {
                   path="/dashboard"
                   element={<Navigate to="/" replace />}
                 ></Route>
-                <Route path="/category" element={<Category />}></Route>
+                <Route
+                  path="/category"
+                  element={<Category user={user} />}
+                ></Route>
                 <Route path="/profile" element={<Profle user={user} />}></Route>
               </Route>
               <Route element={<ForwardAuth user={user} />}>

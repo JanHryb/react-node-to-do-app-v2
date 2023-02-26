@@ -146,7 +146,7 @@ function Profile({ user }) {
       if (validForm) {
         axios
           .post(
-            "user/editUsername",
+            "user/edit-username",
             {
               username,
               userId: user._id,
@@ -206,7 +206,7 @@ function Profile({ user }) {
       if (validForm) {
         axios
           .post(
-            "user/editPassword",
+            "user/edit-password",
             {
               currentPassword,
               newPassword,
@@ -258,7 +258,7 @@ function Profile({ user }) {
       if (validForm) {
         axios
           .post(
-            "user/editEmail",
+            "user/edit-email",
             {
               email,
               userId: user._id,

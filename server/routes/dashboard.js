@@ -59,10 +59,51 @@ router.post("/data", async (req, res) => {
   }
 });
 
+router.post("/category", async (req, res) => {
+  const { userId, queryParameter } = req.body;
+  try {
+    const data = await Task.find({
+      userId: userId,
+    }).populate("categoryId");
+    const tasks = data.filter((task) => task.categoryId.name == queryParameter);
+    const taskCategories = await TaskCategory.find({ custom: false }).sort({
+      name: 1,
+    });
+    const customTaskCategories = await TaskCategory.find({
+      userId: userId,
+    }).sort({
+      name: 1,
+    });
+    const categories = [...taskCategories, ...customTaskCategories];
+
+    if (queryParameter == "all" && data.length > 0) {
+      return res.status(StatusCodes.OK).json({
+        tasks: data,
+        category: { name: "all", icon: "clipboard-list", color: "#3182ce" },
+        categories,
+      });
+    }
+    if (tasks.length > 0) {
+      return res
+        .status(StatusCodes.OK)
+        .json({ tasks, category: tasks[0].categoryId, categories });
+    } else {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json(`empty set of tasks in category named ${queryParameter}`);
+    }
+  } catch (err) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end();
+  }
+});
+
 router.post("/create-category", async (req, res) => {
   let { name, icon, color, userId } = req.body;
   name = name.toLowerCase();
-  let errorMessages = { categoryName: "" };
+  let errorMessages = {
+    categoryName: "",
+    categoryColor: "",
+  };
   try {
     const existingName = await TaskCategory.findOne({
       name: name,
@@ -80,6 +121,40 @@ router.post("/create-category", async (req, res) => {
       userId,
     });
     return res.status(StatusCodes.CREATED).json("category has been created");
+  } catch (err) {
+    if (err.code === 11000) {
+      errorMessages.categoryName = err.message;
+      return res.status(StatusCodes.BAD_REQUEST).json(errorMessages);
+    }
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end();
+  }
+});
+
+router.post("/update-category", async (req, res) => {
+  let { name, color, categoryId, userId, editColorOnly } = req.body;
+  name = name.toLowerCase();
+  let errorMessages = {
+    categoryName: "",
+    categoryColor: "",
+  };
+  try {
+    if (editColorOnly) {
+      await TaskCategory.findByIdAndUpdate({ _id: categoryId }, { color });
+      return res.status(StatusCodes.OK).json({ redirect: false });
+    }
+    const existingName = await TaskCategory.findOne({
+      name: name,
+      userId: userId,
+    });
+    if (existingName) {
+      const error = new Error("this list category already exists");
+      error.code = 11000;
+      throw error;
+    }
+    await TaskCategory.findByIdAndUpdate({ _id: categoryId }, { name, color });
+    return res
+      .status(StatusCodes.OK)
+      .json({ url: `/category?name=${name}`, redirect: true });
   } catch (err) {
     if (err.code === 11000) {
       errorMessages.categoryName = err.message;
