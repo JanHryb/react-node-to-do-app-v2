@@ -192,6 +192,15 @@
   color: #fff;
   font-size: 1em;
 }
+.form__content-wrapper__button-delete {
+  border: none;
+  padding: 0.5em;
+  cursor: pointer;
+  background: #b73e3e;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 1em;
+}
 .form__content-wrapper__link-wrapper {
   font-size: 0.9em;
   color: rgb(195, 195, 195);

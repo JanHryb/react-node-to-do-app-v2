@@ -164,6 +164,22 @@ router.post("/update-category", async (req, res) => {
   }
 });
 
+router.delete("/delete-category/:categoryId", async (req, res) => {
+  const categoryId = req.params.categoryId;
+  try {
+    await Task.deleteMany({ categoryId });
+    await TaskCategory.findByIdAndDelete(categoryId);
+    return res
+      .status(StatusCodes.OK)
+      .json(
+        "category with all tasks related to it has been deleted successfully"
+      );
+  } catch (err) {
+    console.log(err);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end();
+  }
+});
+
 router.post("/create-task", async (req, res) => {
   const { name, description, date, userId, categoryId } = req.body;
   try {

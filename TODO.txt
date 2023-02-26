@@ -18,9 +18,9 @@ TODO: DASHBOARD
         DONE: ablitity to create task category   
     DONE: view of all list categories
     TODO: view of list category -> Category.jsx
-      TODO: ability to edit this category
-      TODO: ability to delete this (custom) category with all tasks related to it
-      TODO: ability to add task
+      DONE: ability to edit this category
+      DONE: ability to delete this (custom) category with all tasks related to it
+      DONE: ability to add task
       TODO: ability to view task
       TODO: ability to get done task
     TODO: pie chart (and another interesting charts)

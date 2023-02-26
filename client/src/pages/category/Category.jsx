@@ -190,6 +190,36 @@ function Category({ user }) {
     });
   };
 
+  const deleteCategory = () => {
+    if (
+      confirm(
+        "are you sure you want to delete this category with all tasks related to it?"
+      )
+    ) {
+      axios
+        .delete(`dashboard/delete-category/${category._id}`, {
+          baseURL: "http://localhost:5000/",
+        })
+        .then((res) => {
+          navigate("/");
+          toast.success("custom category deleted", {
+            toastId: "successDeleteCategory1",
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   const handleSubmit = (e, formType) => {
     e.preventDefault();
     let validForm = true;
@@ -226,7 +256,7 @@ function Category({ user }) {
           .then((res) => {
             setUpdateData(!updateData);
             toast.success("task created", {
-              toastId: "successCreateCategory1",
+              toastId: "successCreateCategory2",
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -261,7 +291,7 @@ function Category({ user }) {
           .then((res) => {
             setUpdateData(!updateData);
             toast.success("list category created", {
-              toastId: "successCreateCategory1",
+              toastId: "successCreateCategory2",
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -388,7 +418,7 @@ function Category({ user }) {
                 create new task
               </button>
             </header>
-            {/* <p>{category.name}</p> */}
+            {/* TODO: */}
             {/* {tasks.map(({ _id, name, description, date, done, categoryId }) => {
           return <div key={_id}>{name}</div>;
         })} */}
@@ -658,6 +688,17 @@ function Category({ user }) {
                 className={styles["form__content-wrapper__button"]}
               >
                 Edit
+              </button>
+            </div>
+            <div className={styles["form__content-wrapper"]}>
+              <button
+                type="button"
+                className={`${styles["form__content-wrapper__button-delete"]}`}
+                onClick={() => {
+                  deleteCategory();
+                }}
+              >
+                Delete this category
               </button>
             </div>
           </form>
