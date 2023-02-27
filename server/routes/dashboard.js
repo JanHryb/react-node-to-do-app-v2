@@ -6,7 +6,7 @@ const Task = require("../models/Task");
 router.post("/data", async (req, res) => {
   const { userId } = req.body;
   try {
-    const tasks = await Task.find({ userId: userId })
+    const tasks = await Task.find({ userId: userId, done: false })
       .populate("categoryId")
       .sort({ categoryId: 1 });
     const taskCategories = await TaskCategory.find({ custom: false }).sort({
