@@ -57,6 +57,7 @@ function Category({ user }) {
   });
   const [blurStyle, setBlurStyle] = useState({ display: "none" });
   const [tasks, setTasks] = useState([]);
+  const [doneTasks, setDoneTasks] = useState([]);
   const [category, setCategory] = useState({});
   const [categories, setCategories] = useState([]);
   const [errorMessages, setErrorMessages] = useState({
@@ -82,6 +83,7 @@ function Category({ user }) {
       )
       .then((res) => {
         setTasks(res.data.tasks);
+        setDoneTasks(res.data.doneTasks);
         setCategory(res.data.category);
         setCategories(res.data.categories);
         if (queryParameter != "all") {
@@ -419,9 +421,20 @@ function Category({ user }) {
               </button>
             </header>
             {/* TODO: */}
-            {/* {tasks.map(({ _id, name, description, date, done, categoryId }) => {
-          return <div key={_id}>{name}</div>;
-        })} */}
+            <section className={styles["main__tasks-wrapper"]}>
+              {tasks.map(
+                ({ _id, name, description, date, done, categoryId }) => {
+                  return (
+                    <div
+                      key={_id}
+                      className={styles["main__tasks-wrapper__task"]}
+                    >
+                      {name}
+                    </div>
+                  );
+                }
+              )}
+            </section>
           </main>
           <div
             className={styles["blur"]}

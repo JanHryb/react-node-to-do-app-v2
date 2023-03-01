@@ -128,9 +128,9 @@ router.post("/login", async (req, res) => {
         throw new Error("bcrypt error");
       }
       if (result) {
-        let tokenExpiryTime = 1000 * 60 * 60 * 24 * 1; //cookie expires after 1 day
+        let tokenExpiryTime = "1d";
         if (remember) {
-          tokenExpiryTime = tokenExpiryTime * 7; //cookie expires after 7 days
+          tokenExpiryTime = "7d";
         }
 
         const accessToken = jwt.sign(

@@ -55,6 +55,7 @@ router.post("/data", async (req, res) => {
     };
     return res.status(StatusCodes.OK).json(data);
   } catch (err) {
+    console.log(err);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end();
   }
 });
@@ -65,7 +66,7 @@ router.post("/category", async (req, res) => {
     const data = await Task.find({
       userId: userId,
     }).populate("categoryId");
-    const tasks = data.filter((task) => task.categoryId.name == queryParameter);
+
     const taskCategories = await TaskCategory.find({ custom: false }).sort({
       name: 1,
     });
@@ -76,17 +77,27 @@ router.post("/category", async (req, res) => {
     });
     const categories = [...taskCategories, ...customTaskCategories];
 
-    if (queryParameter == "all" && data.length > 0) {
+    const tasks = data.filter(
+      (task) => task.categoryId.name == queryParameter && task.done == false
+    );
+    const tasks2 = data.filter((task) => task.done == false);
+
+    if (queryParameter == "all" && tasks2.length > 0) {
+      const doneTasks = data.filter((task) => task.done == true);
       return res.status(StatusCodes.OK).json({
-        tasks: data,
+        tasks: tasks2,
+        doneTasks,
         category: { name: "all", icon: "clipboard-list", color: "#3182ce" },
         categories,
       });
     }
     if (tasks.length > 0) {
+      const doneTasks = data.filter(
+        (task) => task.categoryId.name == queryParameter && task.done == true
+      );
       return res
         .status(StatusCodes.OK)
-        .json({ tasks, category: tasks[0].categoryId, categories });
+        .json({ tasks, doneTasks, category: tasks[0].categoryId, categories });
     } else {
       return res
         .status(StatusCodes.BAD_REQUEST)
@@ -105,11 +116,15 @@ router.post("/create-category", async (req, res) => {
     categoryColor: "",
   };
   try {
-    const existingName = await TaskCategory.findOne({
+    const existingCustomName = await TaskCategory.findOne({
       name: name,
       userId: userId,
     });
-    if (existingName) {
+    const existingDefaultName = await TaskCategory.findOne({
+      name: name,
+      custom: false,
+    });
+    if (existingCustomName || existingDefaultName) {
       const error = new Error("this list category already exists");
       error.code = 11000;
       throw error;
@@ -142,11 +157,15 @@ router.post("/update-category", async (req, res) => {
       await TaskCategory.findByIdAndUpdate({ _id: categoryId }, { color });
       return res.status(StatusCodes.OK).json({ redirect: false });
     }
-    const existingName = await TaskCategory.findOne({
+    const existingCustomName = await TaskCategory.findOne({
       name: name,
       userId: userId,
     });
-    if (existingName) {
+    const existingDefaultName = await TaskCategory.findOne({
+      name: name,
+      custom: false,
+    });
+    if (existingCustomName || existingDefaultName) {
       const error = new Error("this list category already exists");
       error.code = 11000;
       throw error;
