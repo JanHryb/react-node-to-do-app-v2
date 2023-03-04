@@ -19,6 +19,9 @@ import {
   faBriefcase,
   faUserGroup,
   faHouse,
+  faCheck,
+  faEllipsisV,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 library.add(
@@ -429,7 +432,18 @@ function Category({ user }) {
                       key={_id}
                       className={styles["main__tasks-wrapper__task"]}
                     >
-                      {name}
+                      <p className={styles["main__tasks-wrapper__task__name"]}>
+                        {name}
+                      </p>
+                      <div
+                        className={
+                          styles["main__tasks-wrapper__task__icons-wrapper"]
+                        }
+                      >
+                        <FontAwesomeIcon icon={faCheck} />
+                        <FontAwesomeIcon icon={faEllipsisV} />
+                      </div>
+                      {/* <FontAwesomeIcon icon={faTrash} /> */}
                     </div>
                   );
                 }

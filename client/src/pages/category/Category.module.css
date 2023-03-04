@@ -29,6 +29,7 @@
   width: 100%;
   display: flex;
   justify-content: space-around;
+  margin-bottom: 3em;
 }
 .main__header__wrapper {
   display: flex;
@@ -63,6 +64,20 @@
 .main__header__button__icon {
   font-size: 1.5em;
   margin-right: 0.5em;
+}
+.main__tasks-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.main__tasks-wrapper__task {
+  width: 55%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
 }
 .form {
   z-index: 1;
