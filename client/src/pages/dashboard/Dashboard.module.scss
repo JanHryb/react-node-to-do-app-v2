@@ -2,6 +2,7 @@
   height: calc(100% - 65px);
   display: flex;
   flex-direction: column;
+  // align-items: flex-start;
   flex-wrap: wrap;
   padding: 1.5em;
   padding-left: 2em;
@@ -25,7 +26,7 @@
     }
   }
   &__categories-wrapper {
-    width: 50%;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     &__header {
@@ -81,6 +82,11 @@
       }
     }
   }
+  // &__pie-chart-wrapper {
+  //   width: 20%;
+  //   &__chart {
+  //   }
+  // }
 }
 .form {
   z-index: 1;

@@ -63,9 +63,10 @@ router.post("/data", async (req, res) => {
 router.post("/category", async (req, res) => {
   const { userId, queryParameter } = req.body;
   try {
-    const data = await Task.find({
+    let data = await Task.find({
       userId: userId,
     }).populate("categoryId");
+    data = data.reverse();
 
     const taskCategories = await TaskCategory.find({ custom: false }).sort({
       name: 1,
@@ -204,6 +205,27 @@ router.post("/create-task", async (req, res) => {
   try {
     await Task.create({ name, description, date, userId, categoryId });
     return res.status(StatusCodes.CREATED).json("task has been created");
+  } catch (err) {
+    console.log(err);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end();
+  }
+});
+
+router.post("/get-done-task", async (req, res) => {
+  const { taskId } = req.body;
+  try {
+    await Task.findByIdAndUpdate(taskId, { done: true });
+    return res.status(StatusCodes.OK).json("task is done");
+  } catch (err) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end();
+  }
+});
+
+router.delete("/delete-task/:taskId", async (req, res) => {
+  const taskId = req.params.taskId;
+  try {
+    await Task.findByIdAndDelete(taskId);
+    return res.status(StatusCodes.OK).json("task is deleted");
   } catch (err) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end();
   }

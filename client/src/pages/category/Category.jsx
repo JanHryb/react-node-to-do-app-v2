@@ -20,8 +20,7 @@ import {
   faUserGroup,
   faHouse,
   faCheck,
-  faEllipsisV,
-  faTrash,
+  faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 library.add(
@@ -59,6 +58,8 @@ function Category({ user }) {
     display: "none",
   });
   const [blurStyle, setBlurStyle] = useState({ display: "none" });
+  const [taskViewStyle, setTaskViewStyle] = useState({ display: "none" });
+  const [taskViewData, setTaskViewData] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [doneTasks, setDoneTasks] = useState([]);
   const [category, setCategory] = useState({});
@@ -151,7 +152,9 @@ function Category({ user }) {
       setFormCreateTaskStyle({ display: "none" });
       setTaskName("");
       setTaskDate("");
-      setTaskCategory("");
+      if (queryParameter == "all") {
+        setTaskCategory("");
+      }
       setTaskDescription("");
     }
     if (formType == "createCategory") {
@@ -181,11 +184,15 @@ function Category({ user }) {
     setFormCreateTaskStyle({ display: "none" });
     setFormCreateCategoryStyle({ display: "none" });
     setFormEditCategoryStyle({ display: "none" });
+    setTaskViewStyle({ display: "none" });
+    setTaskViewData([]);
     setCategoryEditName("");
     setCategoryEditColor(categoryEditColorDefault);
     setTaskName("");
     setTaskDate("");
-    setTaskCategory("");
+    if (queryParameter == "all") {
+      setTaskCategory("");
+    }
     setTaskDescription("");
     setCategoryName("");
     setCategoryColor("#000000");
@@ -223,6 +230,50 @@ function Category({ user }) {
           console.log(err);
         });
     }
+  };
+
+  const getDoneTask = (taskId) => {
+    axios
+      .post(
+        `dashboard/get-done-task`,
+        { taskId },
+        {
+          baseURL: "http://localhost:5000/",
+        }
+      )
+      .then((res) => {
+        setUpdateData(!updateData);
+        closeTaskView();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const openTaskView = (_id, name, description, date, done, categoryId) => {
+    setBlurStyle({ display: "flex" });
+    setTaskViewStyle({ display: "flex" });
+    setTaskViewData([{ _id, name, description, date, done, categoryId }]);
+  };
+
+  const closeTaskView = () => {
+    setBlurStyle({ display: "none" });
+    setTaskViewStyle({ display: "none" });
+    setTaskViewData([]);
+  };
+
+  const deleteTask = (taskId) => {
+    axios
+      .delete(`dashboard/delete-task/${taskId}`, {
+        baseURL: "http://localhost:5000/",
+      })
+      .then((res) => {
+        setUpdateData(!updateData);
+        closeTaskView();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleSubmit = (e, formType) => {
@@ -432,7 +483,19 @@ function Category({ user }) {
                       key={_id}
                       className={styles["main__tasks-wrapper__task"]}
                     >
-                      <p className={styles["main__tasks-wrapper__task__name"]}>
+                      <p
+                        className={styles["main__tasks-wrapper__task__name"]}
+                        onClick={() => {
+                          openTaskView(
+                            _id,
+                            name,
+                            description,
+                            date,
+                            done,
+                            categoryId
+                          );
+                        }}
+                      >
                         {name}
                       </p>
                       <div
@@ -440,10 +503,104 @@ function Category({ user }) {
                           styles["main__tasks-wrapper__task__icons-wrapper"]
                         }
                       >
-                        <FontAwesomeIcon icon={faCheck} />
-                        <FontAwesomeIcon icon={faEllipsisV} />
+                        <button
+                          type="button"
+                          className={
+                            styles[
+                              "main__tasks-wrapper__task__icons-wrapper__button"
+                            ]
+                          }
+                          onClick={() => {
+                            getDoneTask(_id);
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            icon={faCheck}
+                            className={
+                              styles[
+                                "main__tasks-wrapper__task__icons-wrapper__button__icon"
+                              ]
+                            }
+                          />
+                        </button>
+                        {/* <button
+                          className={
+                            styles[
+                              "main__tasks-wrapper__task__icons-wrapper__button"
+                            ]
+                          }
+                          onClick={() => {
+                            deleteTask(_id);
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrashCan}
+                            className={
+                              styles[
+                                "main__tasks-wrapper__task__icons-wrapper__button__icon"
+                              ]
+                            }
+                          />
+                        </button> */}
                       </div>
-                      {/* <FontAwesomeIcon icon={faTrash} /> */}
+                    </div>
+                  );
+                }
+              )}
+            </section>
+            <section className={styles["main__done-tasks-wrapper"]}>
+              {doneTasks.map(
+                ({ _id, name, description, date, done, categoryId }) => {
+                  return (
+                    <div
+                      key={_id}
+                      className={styles["main__done-tasks-wrapper__task"]}
+                    >
+                      <p
+                        className={
+                          styles["main__done-tasks-wrapper__task__name"]
+                        }
+                        onClick={() => {
+                          openTaskView(
+                            _id,
+                            name,
+                            description,
+                            date,
+                            done,
+                            categoryId
+                          );
+                        }}
+                      >
+                        {name}
+                      </p>
+                      <div
+                        className={
+                          styles[
+                            "main__done-tasks-wrapper__task__icons-wrapper"
+                          ]
+                        }
+                      >
+                        <button
+                          type="button"
+                          className={
+                            styles[
+                              "main__done-tasks-wrapper__task__icons-wrapper__button"
+                            ]
+                          }
+                          onClick={() => {
+                            deleteTask(_id);
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrashCan}
+                            className={
+                              styles[
+                                "main__done-tasks-wrapper__task__icons-wrapper__button__icon"
+                              ]
+                            }
+                          />
+                        </button>
+                      </div>
                     </div>
                   );
                 }
@@ -457,6 +614,134 @@ function Category({ user }) {
               closeBlur();
             }}
           ></div>
+          <div className={styles["task-view"]} style={taskViewStyle}>
+            <header
+              className={`${styles["task-view__content-wrapper"]} ${styles["task-view__content-wrapper--header"]}`}
+            >
+              <h1 className={styles["task-view__content-wrapper__header"]}>
+                Task details
+              </h1>
+              <button
+                className={styles["task-view__content-wrapper__cancel-button"]}
+                type="button"
+                onClick={() => {
+                  closeTaskView();
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faXmarkCircle}
+                  className={
+                    styles["task-view__content-wrapper__cancel-button__icon"]
+                  }
+                />
+              </button>
+            </header>
+            {taskViewData.map(
+              ({ _id, name, description, date, done, categoryId }) => {
+                return (
+                  <div
+                    key={_id}
+                    className={styles["task-view__content-wrapper"]}
+                  >
+                    <div className={styles["task-view__content-wrapper"]}>
+                      <p
+                        className={
+                          styles["task-view__content-wrapper__task-header"]
+                        }
+                      >
+                        name
+                      </p>
+                      <p
+                        className={
+                          styles["task-view__content-wrapper__task-content"]
+                        }
+                      >
+                        {name}
+                      </p>
+                    </div>
+                    <div className={styles["task-view__content-wrapper"]}>
+                      <p
+                        className={
+                          styles["task-view__content-wrapper__task-header"]
+                        }
+                      >
+                        description
+                      </p>
+                      <p
+                        className={
+                          styles["task-view__content-wrapper__task-content"]
+                        }
+                      >
+                        {description ? <>{description}</> : <>-</>}
+                      </p>
+                    </div>
+                    <div className={styles["task-view__content-wrapper"]}>
+                      <p
+                        className={
+                          styles["task-view__content-wrapper__task-header"]
+                        }
+                      >
+                        date
+                      </p>
+                      <p
+                        className={
+                          styles["task-view__content-wrapper__task-content"]
+                        }
+                      >
+                        {date ? (
+                          <>{format(new Date(date), "yyyy-MM-dd HH:mm")}</>
+                        ) : (
+                          <>-</>
+                        )}
+                      </p>
+                    </div>
+                    <div className={styles["task-view__content-wrapper"]}>
+                      <p
+                        className={
+                          styles["task-view__content-wrapper__task-header"]
+                        }
+                      >
+                        list category
+                      </p>
+                      <p
+                        className={
+                          styles["task-view__content-wrapper__task-content"]
+                        }
+                      >
+                        {categoryId.name}
+                      </p>
+                    </div>
+                    {done == false ? (
+                      <div className={styles["form__content-wrapper"]}>
+                        <button
+                          type="button"
+                          className={styles["form__content-wrapper__button"]}
+                          onClick={() => {
+                            getDoneTask(_id);
+                          }}
+                        >
+                          Done
+                        </button>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                    <div className={styles["form__content-wrapper"]}>
+                      <button
+                        type="button"
+                        className={`${styles["form__content-wrapper__button-delete"]}`}
+                        onClick={() => {
+                          deleteTask(_id);
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                );
+              }
+            )}
+          </div>
           <form
             className={styles["form"]}
             onSubmit={(e) => handleSubmit(e, "createTask")}
