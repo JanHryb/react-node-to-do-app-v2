@@ -316,9 +316,9 @@ function Profile({ user }) {
           <div
             className={`${styles["profile-wrapper__item"]} ${styles["profile-wrapper__item--title-details"]}`}
           >
-            <h3 className={styles["profile-wrapper__item__title-details"]}>
+            <h2 className={styles["profile-wrapper__item__title-details"]}>
               Account details
-            </h3>
+            </h2>
           </div>
           <div className={styles["profile-wrapper__item"]}>
             <p className={styles["profile-wrapper__item__title"]}>Username</p>

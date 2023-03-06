@@ -287,9 +287,10 @@ function Category({ user }) {
       });
     }
     if (
-      (categoryEditColor == category.color &&
+      ((formType == "editCategory") & (categoryEditColor == category.color) &&
         categoryEditName == category.name) ||
-      (categoryEditColor == category.color && categoryEditName == "")
+      ((formType == "editCategory") & (categoryEditColor == category.color) &&
+        categoryEditName == "")
     ) {
       validForm = false;
       closeForm(e, "editCategory");

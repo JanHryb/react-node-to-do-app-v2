@@ -286,11 +286,11 @@ function Dashboard({ user }) {
             </header>
             <section className={styles["main__categories-wrapper"]}>
               <header className={styles["main__categories-wrapper__header"]}>
-                <h3
+                <h2
                   className={styles["main__categories-wrapper__header__title"]}
                 >
                   Task lists
-                </h3>
+                </h2>
                 <button
                   type="button"
                   className={styles["main__categories-wrapper__header__button"]}
