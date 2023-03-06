@@ -73,18 +73,23 @@
     &__task {
       width: 60%;
       display: flex;
-      justify-content: space-between;
       align-items: center;
       margin-bottom: 1em;
-      padding: 1em;
       box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
       &__name {
+        padding: 1em;
         cursor: pointer;
+        width: 100%;
         &::first-letter {
           text-transform: uppercase;
         }
       }
       &__icons-wrapper {
+        border-left: 1px solid rgba(0, 0, 0, 0.24);
+        border-right: none;
+        border-bottom: none;
+        border-top: none;
+        padding: 1em;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -92,12 +97,6 @@
           border: none;
           background: transparent;
           cursor: pointer;
-          margin-left: 1em;
-          margin-right: 2em;
-          position: relative;
-          &:last-child {
-            margin: 0;
-          }
           &__icon {
             font-size: 1.2em;
           }
@@ -113,20 +112,25 @@
     &__task {
       width: 60%;
       display: flex;
-      justify-content: space-between;
       align-items: center;
       margin-bottom: 1em;
-      padding: 1em;
       box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
       filter: opacity(0.6);
       &__name {
+        padding: 1em;
         cursor: pointer;
         text-decoration: line-through;
+        width: 100%;
         &::first-letter {
           text-transform: uppercase;
         }
       }
       &__icons-wrapper {
+        border-left: 1px solid rgba(0, 0, 0, 0.24);
+        border-right: none;
+        border-bottom: none;
+        border-top: none;
+        padding: 1em;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -134,11 +138,6 @@
           border: none;
           background: transparent;
           cursor: pointer;
-          margin-left: 1em;
-          margin-right: 2em;
-          &:last-child {
-            margin: 0;
-          }
           &__icon {
             font-size: 1.2em;
           }

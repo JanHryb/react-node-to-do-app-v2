@@ -27,6 +27,8 @@ DONE: DASHBOARD
       DONE: ability to view not done tasks
       DONE: ability to view done tasks
       DONE: ability to get done task
-    TODO: pie chart (and another interesting charts)
+      OPTIONAL: ablility to edit task
+    OPTIONAL: pie chart (and another interesting charts)
+
 
 

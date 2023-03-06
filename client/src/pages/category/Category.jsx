@@ -287,8 +287,9 @@ function Category({ user }) {
       });
     }
     if (
-      categoryEditColor == category.color &&
-      categoryEditName == category.name
+      (categoryEditColor == category.color &&
+        categoryEditName == category.name) ||
+      (categoryEditColor == category.color && categoryEditName == "")
     ) {
       validForm = false;
       closeForm(e, "editCategory");
