@@ -211,6 +211,27 @@ router.post("/create-task", async (req, res) => {
   }
 });
 
+router.post("/update-task", async (req, res) => {
+  const { taskEditId, taskEditName, taskEditDescription, taskEditDate } =
+    req.body;
+  try {
+    await Task.findByIdAndUpdate(
+      { _id: taskEditId },
+      {
+        name: taskEditName,
+        description: taskEditDescription,
+        date: taskEditDate,
+      }
+    );
+    const updatedTask = await Task.findById({ _id: taskEditId }).populate(
+      "categoryId"
+    );
+    return res.status(StatusCodes.OK).json(updatedTask);
+  } catch (err) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end();
+  }
+});
+
 router.post("/get-done-task", async (req, res) => {
   const { taskId } = req.body;
   try {

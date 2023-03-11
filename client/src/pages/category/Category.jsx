@@ -42,6 +42,14 @@ function Category({ user }) {
   const [taskDescription, setTaskDescription] = useState("");
   const [taskCategory, setTaskCategory] = useState("");
   const [taskDate, setTaskDate] = useState("");
+  const [taskEditId, setTaskEditId] = useState("");
+  const [taskEditName, setTaskEditName] = useState("");
+  const [taskEditDescription, setTaskEditDescription] = useState("");
+  const [taskEditDate, setTaskEditDate] = useState("");
+  const [taskEditNameDefault, setTaskEditNameDefault] = useState("");
+  const [taskEditDescriptionDefault, setTaskEditDescriptionDefault] =
+    useState("");
+  const [taskEditDateDefault, setTaskEditDateDefault] = useState("");
   const [categoryName, setCategoryName] = useState("");
   const [categoryColor, setCategoryColor] = useState("#000000");
   const [categoryEditName, setCategoryEditName] = useState("");
@@ -55,6 +63,9 @@ function Category({ user }) {
     display: "none",
   });
   const [formEditCategoryStyle, setFormEditCategoryStyle] = useState({
+    display: "none",
+  });
+  const [formEditTaskStyle, setFormEditTaskStyle] = useState({
     display: "none",
   });
   const [blurStyle, setBlurStyle] = useState({ display: "none" });
@@ -119,6 +130,16 @@ function Category({ user }) {
   const handleTaskDateChange = (e) => {
     setTaskDate(e.target.value);
   };
+
+  const handleTaskEditNameChange = (e) => {
+    setTaskEditName(e.target.value);
+  };
+  const handleTaskEditDescriptionChange = (e) => {
+    setTaskEditDescription(e.target.value);
+  };
+  const handleTaskEditDateChange = (e) => {
+    setTaskEditDate(e.target.value);
+  };
   const handleCategoryNameChange = (e) => {
     setCategoryName(e.target.value);
   };
@@ -136,6 +157,11 @@ function Category({ user }) {
     if (formType == "createTask") {
       setBlurStyle({ display: "flex" });
       setFormCreateTaskStyle({ display: "flex" });
+    }
+    if (formType == "editTask") {
+      setBlurStyle({ display: "flex" });
+      setFormEditTaskStyle({ display: "flex" });
+      setTaskViewStyle({ display: "none" });
     }
     if (formType == "createCategory") {
       setFormCreateCategoryStyle({ display: "flex" });
@@ -156,6 +182,13 @@ function Category({ user }) {
         setTaskCategory("");
       }
       setTaskDescription("");
+    }
+    if (formType == "editTask") {
+      setFormEditTaskStyle({ display: "none" });
+      setTaskViewStyle({ display: "flex" });
+      setTaskEditName(taskEditNameDefault);
+      setTaskEditDescription(taskEditDescriptionDefault);
+      setTaskEditDate(taskEditDateDefault);
     }
     if (formType == "createCategory") {
       setFormCreateCategoryStyle({ display: "none" });
@@ -182,6 +215,7 @@ function Category({ user }) {
   const closeBlur = () => {
     setBlurStyle({ display: "none" });
     setFormCreateTaskStyle({ display: "none" });
+    setFormEditTaskStyle({ display: "none" });
     setFormCreateCategoryStyle({ display: "none" });
     setFormEditCategoryStyle({ display: "none" });
     setTaskViewStyle({ display: "none" });
@@ -190,6 +224,13 @@ function Category({ user }) {
     setCategoryEditColor(categoryEditColorDefault);
     setTaskName("");
     setTaskDate("");
+    setTaskEditId("");
+    setTaskEditName("");
+    setTaskEditDescription("");
+    setTaskEditDate("");
+    setTaskEditNameDefault("");
+    setTaskEditDescriptionDefault("");
+    setTaskEditDateDefault("");
     if (queryParameter == "all") {
       setTaskCategory("");
     }
@@ -254,12 +295,29 @@ function Category({ user }) {
     setBlurStyle({ display: "flex" });
     setTaskViewStyle({ display: "flex" });
     setTaskViewData([{ _id, name, description, date, done, categoryId }]);
+    if (date != null) {
+      setTaskEditDate(format(new Date(date), "yyyy-MM-dd'T'HH:mm"));
+      setTaskEditDateDefault(format(new Date(date), "yyyy-MM-dd'T'HH:mm"));
+    }
+    setTaskEditId(_id);
+    setTaskEditName(name);
+    setTaskEditDescription(description);
+    setTaskEditNameDefault(name);
+    setTaskEditDescriptionDefault(description);
   };
 
   const closeTaskView = () => {
     setBlurStyle({ display: "none" });
     setTaskViewStyle({ display: "none" });
+    setFormEditTaskStyle({ display: "none" });
     setTaskViewData([]);
+    setTaskEditId("");
+    setTaskEditName("");
+    setTaskEditDescription("");
+    setTaskEditDate("");
+    setTaskEditNameDefault("");
+    setTaskEditDescriptionDefault("");
+    setTaskEditDateDefault("");
   };
 
   const deleteTask = (taskId) => {
@@ -287,13 +345,67 @@ function Category({ user }) {
       });
     }
     if (
-      ((formType == "editCategory") & (categoryEditColor == category.color) &&
+      (formType == "editCategory" &&
+        categoryEditColor == category.color &&
         categoryEditName == category.name) ||
-      ((formType == "editCategory") & (categoryEditColor == category.color) &&
+      (formType == "editCategory" &&
+        categoryEditColor == category.color &&
         categoryEditName == "")
     ) {
       validForm = false;
       closeForm(e, "editCategory");
+    }
+    if (
+      formType == "editTask" &&
+      taskEditName == taskEditNameDefault &&
+      taskEditDate == taskEditDateDefault &&
+      taskEditDescription == taskEditDescriptionDefault
+    ) {
+      validForm = false;
+      closeForm(e, "editTask");
+    }
+    if (formType == "editTask") {
+      if (validForm) {
+        axios
+          .post(
+            "dashboard/update-task",
+            {
+              taskEditId,
+              taskEditName,
+              taskEditDescription,
+              taskEditDate,
+            },
+            {
+              baseURL: "http://localhost:5000/",
+            }
+          )
+          .then((res) => {
+            setUpdateData(!updateData);
+            toast.success("task updated", {
+              toastId: "successUpdateTask2",
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            closeTaskView();
+            openTaskView(
+              res.data._id,
+              res.data.name,
+              res.data.description,
+              res.data.date,
+              res.data.done,
+              res.data.categoryId
+            );
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     }
     if (formType == "createTask") {
       if (validForm) {
@@ -314,7 +426,7 @@ function Category({ user }) {
           .then((res) => {
             setUpdateData(!updateData);
             toast.success("task created", {
-              toastId: "successCreateCategory2",
+              toastId: "successCreateTask2",
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -476,7 +588,6 @@ function Category({ user }) {
                 create new task
               </button>
             </header>
-            {/* TODO: */}
             <section className={styles["main__tasks-wrapper"]}>
               {tasks.map(
                 ({ _id, name, description, date, done, categoryId }) => {
@@ -623,6 +734,31 @@ function Category({ user }) {
               <h1 className={styles["task-view__content-wrapper__header"]}>
                 Task details
               </h1>
+              {taskViewData.length > 0 && taskViewData[0].done ? (
+                <></>
+              ) : (
+                <>
+                  <button
+                    className={
+                      styles["task-view__content-wrapper__cancel-button"]
+                    }
+                    type="button"
+                    onClick={(e) => {
+                      openForm(e, "editTask");
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faPenToSquare}
+                      className={
+                        styles[
+                          "task-view__content-wrapper__cancel-button__icon"
+                        ]
+                      }
+                    />
+                  </button>
+                </>
+              )}
+
               <button
                 className={styles["task-view__content-wrapper__cancel-button"]}
                 type="button"
@@ -744,6 +880,70 @@ function Category({ user }) {
               }
             )}
           </div>
+          <form
+            className={styles["form"]}
+            onSubmit={(e) => handleSubmit(e, "editTask")}
+            style={formEditTaskStyle}
+          >
+            <header
+              className={`${styles["form__content-wrapper"]} ${styles["form__content-wrapper--header"]}`}
+            >
+              <h1 className={styles["form__content-wrapper__header"]}>
+                Edit Task
+              </h1>
+              <button
+                className={styles["form__content-wrapper__cancel-button"]}
+                type="button"
+                onClick={(e) => {
+                  closeForm(e, "editTask");
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faXmarkCircle}
+                  className={
+                    styles["form__content-wrapper__cancel-button__icon"]
+                  }
+                />
+              </button>
+            </header>
+            <div className={styles["form__content-wrapper"]}>
+              <input
+                type="text"
+                required
+                onChange={handleTaskEditNameChange}
+                value={taskEditName}
+                className={styles["form__content-wrapper__input"]}
+                placeholder="name"
+              />
+            </div>
+            <div className={styles["form__content-wrapper"]}>
+              <textarea
+                onChange={handleTaskEditDescriptionChange}
+                value={taskEditDescription}
+                className={`${styles["form__content-wrapper__input"]} ${styles["form__content-wrapper__input--textarea"]}`}
+                placeholder="description"
+                rows="3"
+              ></textarea>
+            </div>
+            <div className={styles["form__content-wrapper"]}>
+              <input
+                type="datetime-local"
+                onChange={handleTaskEditDateChange}
+                value={taskEditDate}
+                className={`${styles["form__content-wrapper__input"]} ${styles["form__content-wrapper__input--datetime-local"]}`}
+                placeholder="date"
+                min={minCalendarDate}
+              />
+            </div>
+            <div className={styles["form__content-wrapper"]}>
+              <button
+                type="submit"
+                className={styles["form__content-wrapper__button"]}
+              >
+                Edit
+              </button>
+            </div>
+          </form>
           <form
             className={styles["form"]}
             onSubmit={(e) => handleSubmit(e, "createTask")}
