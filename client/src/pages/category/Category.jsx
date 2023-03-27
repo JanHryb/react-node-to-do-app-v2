@@ -86,16 +86,10 @@ function Category({ user }) {
 
   useEffect(() => {
     axios
-      .post(
-        "dashboard/category",
-        {
-          userId: user._id,
-          queryParameter,
-        },
-        {
-          baseURL: "http://localhost:5000/",
-        }
-      )
+      .post("dashboard/category", {
+        userId: user._id,
+        queryParameter,
+      })
       .then((res) => {
         setTasks(res.data.tasks);
         setDoneTasks(res.data.doneTasks);
@@ -250,9 +244,7 @@ function Category({ user }) {
       )
     ) {
       axios
-        .delete(`dashboard/delete-category/${category._id}`, {
-          baseURL: "http://localhost:5000/",
-        })
+        .delete(`dashboard/delete-category/${category._id}`)
         .then((res) => {
           navigate("/");
           toast.success("custom category deleted", {
@@ -275,13 +267,7 @@ function Category({ user }) {
 
   const getDoneTask = (taskId) => {
     axios
-      .post(
-        `dashboard/get-done-task`,
-        { taskId },
-        {
-          baseURL: "http://localhost:5000/",
-        }
-      )
+      .post(`dashboard/get-done-task`, { taskId })
       .then((res) => {
         setUpdateData(!updateData);
         closeTaskView();
@@ -322,9 +308,7 @@ function Category({ user }) {
 
   const deleteTask = (taskId) => {
     axios
-      .delete(`dashboard/delete-task/${taskId}`, {
-        baseURL: "http://localhost:5000/",
-      })
+      .delete(`dashboard/delete-task/${taskId}`)
       .then((res) => {
         setUpdateData(!updateData);
         closeTaskView();
@@ -367,18 +351,12 @@ function Category({ user }) {
     if (formType == "editTask") {
       if (validForm) {
         axios
-          .post(
-            "dashboard/update-task",
-            {
-              taskEditId,
-              taskEditName,
-              taskEditDescription,
-              taskEditDate,
-            },
-            {
-              baseURL: "http://localhost:5000/",
-            }
-          )
+          .post("dashboard/update-task", {
+            taskEditId,
+            taskEditName,
+            taskEditDescription,
+            taskEditDate,
+          })
           .then((res) => {
             setUpdateData(!updateData);
             toast.success("task updated", {
@@ -410,19 +388,13 @@ function Category({ user }) {
     if (formType == "createTask") {
       if (validForm) {
         axios
-          .post(
-            "dashboard/create-task",
-            {
-              name: taskName,
-              description: taskDescription,
-              date: taskDate,
-              userId: user._id,
-              categoryId: taskCategory,
-            },
-            {
-              baseURL: "http://localhost:5000/",
-            }
-          )
+          .post("dashboard/create-task", {
+            name: taskName,
+            description: taskDescription,
+            date: taskDate,
+            userId: user._id,
+            categoryId: taskCategory,
+          })
           .then((res) => {
             setUpdateData(!updateData);
             toast.success("task created", {
@@ -446,18 +418,12 @@ function Category({ user }) {
     if (formType == "createCategory") {
       if (validForm) {
         axios
-          .post(
-            "dashboard/create-category",
-            {
-              name: categoryName,
-              icon: faPencil.iconName,
-              color: categoryColor,
-              userId: user._id,
-            },
-            {
-              baseURL: "http://localhost:5000/",
-            }
-          )
+          .post("dashboard/create-category", {
+            name: categoryName,
+            icon: faPencil.iconName,
+            color: categoryColor,
+            userId: user._id,
+          })
           .then((res) => {
             setUpdateData(!updateData);
             toast.success("list category created", {
@@ -487,19 +453,13 @@ function Category({ user }) {
           editColorOnly = true;
         }
         axios
-          .post(
-            "dashboard/update-category",
-            {
-              name: categoryEditName,
-              color: categoryEditColor,
-              categoryId: category._id,
-              userId: user._id,
-              editColorOnly,
-            },
-            {
-              baseURL: "http://localhost:5000/",
-            }
-          )
+          .post("dashboard/update-category", {
+            name: categoryEditName,
+            color: categoryEditColor,
+            categoryId: category._id,
+            userId: user._id,
+            editColorOnly,
+          })
           .then((res) => {
             if (res.data.redirect) {
               navigate(res.data.url);

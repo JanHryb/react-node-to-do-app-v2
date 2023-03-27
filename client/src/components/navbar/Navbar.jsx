@@ -10,11 +10,7 @@ function Navbar({ user }) {
 
   const logout = () => {
     axios
-      .post(
-        "user/logout",
-        {},
-        { baseURL: "http://localhost:5000/", withCredentials: true }
-      )
+      .post("user/logout", {}, { withCredentials: true })
       .then((res) => {
         navigate("/login");
       })

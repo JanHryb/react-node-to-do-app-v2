@@ -88,15 +88,9 @@ function Dashboard({ user }) {
 
   useEffect(() => {
     axios
-      .post(
-        "dashboard/data",
-        {
-          userId: user._id,
-        },
-        {
-          baseURL: "http://localhost:5000/",
-        }
-      )
+      .post("dashboard/data", {
+        userId: user._id,
+      })
       .then((res) => {
         setTasks(res.data.tasks);
         setCategories(res.data.categories);
@@ -190,19 +184,13 @@ function Dashboard({ user }) {
     if (formType == "createTask") {
       if (validForm) {
         axios
-          .post(
-            "dashboard/create-task",
-            {
-              name: taskName,
-              description: taskDescription,
-              date: taskDate,
-              userId: user._id,
-              categoryId: taskCategory,
-            },
-            {
-              baseURL: "http://localhost:5000/",
-            }
-          )
+          .post("dashboard/create-task", {
+            name: taskName,
+            description: taskDescription,
+            date: taskDate,
+            userId: user._id,
+            categoryId: taskCategory,
+          })
           .then((res) => {
             setUpdateData(!updateData);
             toast.success("task created", {
@@ -226,18 +214,12 @@ function Dashboard({ user }) {
     if (formType == "createCategory") {
       if (validForm) {
         axios
-          .post(
-            "dashboard/create-category",
-            {
-              name: categoryName,
-              icon: faPencil.iconName,
-              color: categoryColor,
-              userId: user._id,
-            },
-            {
-              baseURL: "http://localhost:5000/",
-            }
-          )
+          .post("dashboard/create-category", {
+            name: categoryName,
+            icon: faPencil.iconName,
+            color: categoryColor,
+            userId: user._id,
+          })
           .then((res) => {
             setUpdateData(!updateData);
             toast.success("list category created", {

@@ -22,7 +22,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("user", { baseURL: "http://localhost:5000/", withCredentials: true })
+      .get("user", { withCredentials: true })
       .then((res) => {
         setUser(res.data);
       })

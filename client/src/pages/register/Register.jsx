@@ -72,16 +72,12 @@ function Register() {
     e.preventDefault();
     if (validateForm()) {
       axios
-        .post(
-          "user/register",
-          {
-            username,
-            email,
-            password,
-            passwordRepeat,
-          },
-          { baseURL: "http://localhost:5000/" }
-        )
+        .post("user/register", {
+          username,
+          email,
+          password,
+          passwordRepeat,
+        })
         .then((res) => {
           // console.log(res);
           localStorage.setItem("successMessage", "Account has been created");

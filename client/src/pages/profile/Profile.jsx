@@ -145,14 +145,10 @@ function Profile({ user }) {
       }
       if (validForm) {
         axios
-          .post(
-            "user/edit-username",
-            {
-              username,
-              userId: user._id,
-            },
-            { baseURL: "http://localhost:5000/" }
-          )
+          .post("user/edit-username", {
+            username,
+            userId: user._id,
+          })
           .then((res) => {
             navigate(location.pathname);
             toast.success("username updated", {
@@ -205,16 +201,12 @@ function Profile({ user }) {
       }
       if (validForm) {
         axios
-          .post(
-            "user/edit-password",
-            {
-              currentPassword,
-              newPassword,
-              newPasswordRepeat,
-              userId: user._id,
-            },
-            { baseURL: "http://localhost:5000/" }
-          )
+          .post("user/edit-password", {
+            currentPassword,
+            newPassword,
+            newPasswordRepeat,
+            userId: user._id,
+          })
           .then((res) => {
             navigate(location.pathname);
             toast.success("password updated", {
@@ -257,14 +249,10 @@ function Profile({ user }) {
       }
       if (validForm) {
         axios
-          .post(
-            "user/edit-email",
-            {
-              email,
-              userId: user._id,
-            },
-            { baseURL: "http://localhost:5000/" }
-          )
+          .post("user/edit-email", {
+            email,
+            userId: user._id,
+          })
           .then((res) => {
             navigate(location.pathname);
             toast.success("email updated", {

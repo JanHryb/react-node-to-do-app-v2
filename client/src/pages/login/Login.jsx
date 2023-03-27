@@ -58,7 +58,7 @@ function Login() {
         .post(
           "user/login",
           { email, password, remember },
-          { baseURL: "http://localhost:5000/", withCredentials: true }
+          { withCredentials: true }
         )
         .then((res) => {
           navigate("/");
