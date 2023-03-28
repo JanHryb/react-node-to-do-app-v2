@@ -9,7 +9,7 @@ const TaskCategory = require("../models/TaskCategory");
 
 //auth check
 
-router.get(
+router.post(
   "/",
   passport.authenticate("jwt", {
     session: false,
@@ -138,14 +138,16 @@ router.post("/login", async (req, res) => {
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: tokenExpiryTime }
         );
-        return res
-          .status(StatusCodes.OK)
-          .cookie("accessToken", accessToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-          })
-          .json("successfull login");
+        return (
+          res
+            .status(StatusCodes.OK)
+            // .cookie("accessToken", accessToken, {
+            //   httpOnly: true,
+            //   secure: true,
+            //   sameSite: "none",
+            // })
+            .json({ accessToken })
+        );
       } else {
         errorMessages.email = "email or password incorrect";
         errorMessages.password = "email or password incorrect";
@@ -158,10 +160,12 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-  return res
-    .status(StatusCodes.OK)
-    .clearCookie("accessToken")
-    .json("you are logged out");
+  return (
+    res
+      .status(StatusCodes.OK)
+      // .clearCookie("accessToken")
+      .json("you are logged out")
+  );
 });
 
 router.post("/edit-username", async (req, res) => {

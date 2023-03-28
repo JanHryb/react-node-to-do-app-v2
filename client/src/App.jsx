@@ -10,6 +10,7 @@ import Register from "./pages/register/Register";
 import NotFound from "./pages/notFound/NotFound";
 import Profle from "./pages/profile/Profile";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
@@ -22,7 +23,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("user", { withCredentials: true })
+      .post("user", { accessToken: Cookies.get("accessToken") })
       .then((res) => {
         setUser(res.data);
       })

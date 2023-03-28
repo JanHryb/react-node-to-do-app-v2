@@ -3,6 +3,7 @@ import styles from "./Login.module.css";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -55,12 +56,9 @@ function Login() {
     e.preventDefault();
     if (validateForm()) {
       axios
-        .post(
-          "user/login",
-          { email, password, remember },
-          { withCredentials: true }
-        )
+        .post("user/login", { email, password, remember })
         .then((res) => {
+          Cookies.set("accessToken", res.data.accessToken, { secure: true });
           navigate("/");
         })
         .catch((err) => {

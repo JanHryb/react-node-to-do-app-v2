@@ -5,7 +5,7 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:5000/";
+axios.defaults.baseURL = "http://localhost:5000/"; //url to your API
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

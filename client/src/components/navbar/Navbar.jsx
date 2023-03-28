@@ -4,14 +4,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarCheck, faUser } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 function Navbar({ user }) {
   const navigate = useNavigate();
 
   const logout = () => {
     axios
-      .post("user/logout", {}, { withCredentials: true })
+      .post("user/logout", {})
       .then((res) => {
+        Cookies.remove("accessToken");
         navigate("/login");
       })
       .catch((err) => {});
